@@ -629,29 +629,32 @@ window.addEventListener('keydown', (e)=>{
 });
 
 // ---------- NDA ----------
-const NDA_PASSWORD = "hola";
-// --- Vídeo NDA vía YouTube (enlace: https://youtu.be/dJw-I4L-00Y) ---
-// Para cambiar el vídeo más adelante, sustituye el ID de abajo por el de otro enlace de YouTube
-// (la parte final de youtu.be/AQUÍ_VA_EL_ID, o de youtube.com/watch?v=AQUÍ_VA_EL_ID).
-const NDA_YOUTUBE_ID = "dJw-I4L-00Y";
-const NDA_EMBED_URL = `https://www.youtube.com/embed/${NDA_YOUTUBE_ID}?autoplay=1&rel=0`;
-const NDA_FALLBACK_URL = `https://youtu.be/${NDA_YOUTUBE_ID}`;
+// La contraseña y el ID del vídeo YA NO están escritos en este archivo: los comprueba una
+// función serverless en Vercel (/api/verify-reel.js), que lee dos variables de entorno
+// configuradas en el panel de Vercel. Así ni la contraseña ni el vídeo aparecen nunca en
+// el código que llega al navegador (antes, cualquiera podía verlos con "ver código fuente").
+// IMPORTANTE: por esto mismo, la comprobación solo funciona cuando la página está desplegada
+// de verdad en Vercel (del-rio3d.vercel.app o tu dominio final) — al abrir este archivo suelto
+// en tu ordenador, o en la vista previa de Claude, no hay ningún servidor detrás y el aviso
+// "esta comprobación solo funciona desplegada en vercel" es el comportamiento esperado, no un fallo.
 const reelScreen = document.getElementById('reel-screen');
 const reelInfo = document.getElementById('reel-info');
 const reelBtn = document.getElementById('reel-btn');
 const reelPw = document.getElementById('reel-pw');
 const reelMsg = document.getElementById('reel-msg');
 const reelFallbackLink = document.getElementById('reel-fallback-link');
-if (reelFallbackLink) reelFallbackLink.href = NDA_FALLBACK_URL;
 
-function unlockReel(){
+function unlockReel(videoId){
+  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+  if (reelFallbackLink) reelFallbackLink.href = `https://youtu.be/${videoId}`;
+
   const lockUi = reelScreen.querySelector('.lock-ui');
   lockUi.style.opacity = '0';
   reelScreen.classList.remove('locked');
   reelScreen.classList.add('is-open'); // la pantalla se extiende con un aterrizaje suave (sin frenazo)
 
   function showVideo(){
-    reelScreen.innerHTML = `<span class="tagpill">nda</span><iframe class="reel-iframe" src="${NDA_EMBED_URL}" allow="autoplay; fullscreen" loading="lazy"></iframe>`;
+    reelScreen.innerHTML = `<span class="tagpill">nda</span><iframe class="reel-iframe" src="${embedUrl}" allow="autoplay; fullscreen" loading="lazy"></iframe>`;
     const iframe = reelScreen.querySelector('.reel-iframe');
     requestAnimationFrame(()=> iframe.classList.add('is-visible')); // el vídeo aparece con fundido una vez el hueco ya está totalmente desplegado
     reelInfo.hidden = false;
@@ -671,11 +674,38 @@ function unlockReel(){
   reelScreen.addEventListener('transitionend', onEnd);
   setTimeout(()=>{ if (!done){ done = true; reelScreen.removeEventListener('transitionend', onEnd); showVideo(); } }, 1700); // red de seguridad
 }
-reelBtn.addEventListener('click', () => {
-  if (reelPw.value === NDA_PASSWORD) { unlockReel(); }
-  else { reelMsg.textContent = "contraseña incorrecta"; }
-});
-reelPw.addEventListener('keydown', e => { if (e.key === 'Enter') reelBtn.click(); });
+
+async function checkReelPassword(){
+  const pw = reelPw.value;
+  if (!pw || reelBtn.disabled) return;
+  reelBtn.disabled = true;
+  reelMsg.textContent = 'comprobando...';
+  try {
+    const res = await fetch('/api/verify-reel', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw })
+    });
+    const data = await res.json().catch(()=>null);
+    if (res.ok && data && data.ok && data.videoId) {
+      reelMsg.textContent = '';
+      unlockReel(data.videoId);
+    } else if (res.status === 401) {
+      reelMsg.textContent = 'contraseña incorrecta';
+    } else if (data && data.error === 'server_not_configured') {
+      reelMsg.textContent = 'faltan REEL_PASSWORD / REEL_VIDEO_ID en las variables de entorno de vercel';
+    } else {
+      // 404/501/etc.: no existe esta función en el entorno actual (normal fuera de vercel).
+      reelMsg.textContent = 'esta comprobación solo funciona desplegada en vercel';
+    }
+  } catch (err) {
+    reelMsg.textContent = 'no se pudo comprobar la contraseña (revisa tu conexión)';
+  } finally {
+    reelBtn.disabled = false;
+  }
+}
+reelBtn.addEventListener('click', checkReelPassword);
+reelPw.addEventListener('keydown', e => { if (e.key === 'Enter') checkReelPassword(); });
 
 // ---------- Ficha de detalle de proyecto (dentro de la cara de proyectos) ----------
 const projDetail = document.getElementById('proj-detail');
