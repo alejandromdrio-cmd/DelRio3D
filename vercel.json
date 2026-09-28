@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/reel", "destination": "/index.html" },
+    { "source": "/sobre-mi", "destination": "/index.html" },
+    { "source": "/proyectos", "destination": "/index.html" },
+    { "source": "/contacto", "destination": "/index.html" }
+  ]
+}

@@ -544,6 +544,38 @@ function navigateTo(face){
   pulseCurve(cfg.curve);
   activeFace = face;
   updateBranches();
+  setHashForFace(face);
+}
+
+// ---------- Enlace directo a un departamento (deep link) ----------
+// Cada vez que cambiamos de cara, reflejamos el destino en la URL (#reel, #sobre-mi, ...)
+// para que ese enlace siempre lleve directo ahí, sin pasar por la portada.
+// Así, p.ej., "tu-portfolio.com/#reel" es un enlace ESTABLE al reel: si cambias el vídeo
+// o la contraseña dentro del código más adelante, el enlace que compartes no cambia nunca.
+function setHashForFace(face){
+  if (!history.replaceState) return;
+  const hash = face === 'inicio' ? '' : ('#' + face);
+  history.replaceState(null, '', location.pathname + location.search + hash);
+}
+function jumpToFaceInstant(face){
+  if (!ENTRY[face] || face === activeFace) return;
+  const cfg = ENTRY[face];
+  const outEl = document.getElementById('face-'+activeFace);
+  const inEl = document.getElementById('face-'+face);
+  outEl.style.transition = 'none';
+  outEl.style.opacity = '0';
+  outEl.style.pointerEvents = 'none';
+  inEl.style.transition = 'none';
+  inEl.style.transform = 'none';
+  inEl.style.opacity = '1';
+  inEl.style.pointerEvents = 'auto';
+  void inEl.offsetHeight;
+  outEl.style.transition = '';
+  inEl.style.transition = '';
+  document.getElementById('current-face').textContent = cfg.label;
+  document.querySelectorAll('[data-face]').forEach(el=> el.classList.toggle('is-active', el.dataset.face === face));
+  activeFace = face;
+  updateBranches();
 }
 window.addEventListener('resize', ()=>{});
 document.querySelectorAll('[data-face]').forEach(el=>{
@@ -569,6 +601,21 @@ document.querySelectorAll('.edge-branch').forEach(btn=>{
   });
 });
 updateBranches();
+
+// Si la página se abre con un enlace directo, saltamos ahí sin pasar por la portada.
+// Admite dos formas del mismo enlace:
+//  - tudominio.com/#reel   -> funciona siempre, sin configurar nada en el hosting.
+//  - tudominio.com/reel    -> ruta "limpia" (sin #); requiere una regla de rewrite en el
+//                             hosting (en Vercel: vercel.json) que sirva este mismo archivo
+//                             para esa ruta. Ver comentario junto a vercel.json de ejemplo.
+(function(){
+  const fromHash = (location.hash || '').replace('#','');
+  const fromPath = location.pathname.replace(/^\/|\/$/g, ''); // quita barras al inicio/fin
+  const target = ENTRY[fromHash] ? fromHash : (ENTRY[fromPath] ? fromPath : null);
+  if (target && target !== 'inicio') {
+    jumpToFaceInstant(target);
+  }
+})();
 
 // Flechas del teclado: mismo mapeo direccional que las ramas (derecha=sobre_mi, izquierda=proyectos, arriba=reel, abajo=contacto).
 const ARROW_TO_FACE = { ArrowRight:'sobre-mi', ArrowLeft:'proyectos', ArrowUp:'reel', ArrowDown:'contacto' };
