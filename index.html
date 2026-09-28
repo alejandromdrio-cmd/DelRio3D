@@ -63,57 +63,72 @@
   .reduce-motion .face{transition:none;}
   #face-inicio{opacity:1; pointer-events:auto;}
 
-  /* ---- ramas de navegación (bordes de pantalla, desktop) ---- */
-  /* ---- degradados de borde: la página se difumina antes de llegar a las flechas ----
-     (empiezan JUSTO DEBAJO de la topbar, para no oscurecer su texto) */
+  /* ---- degradado inferior: la página se difumina antes de llegar a la barra de navegación ---- */
   .edge-fade{position:fixed; z-index:40; pointer-events:none;}
-  .edge-fade.top{left:0; right:0; top:calc(env(safe-area-inset-top,0px) + 44px); height:56px;
-    background:linear-gradient(to bottom, var(--sky-top) 0, rgba(26,27,30,0) 100%);}
-  .edge-fade.bottom{left:0; right:0; bottom:0; height:48px;
+  .edge-fade.bottom{left:0; right:0; bottom:0; height:96px;
     background:linear-gradient(to top, var(--sky-top) 0, rgba(26,27,30,0) 100%);}
-  .edge-fade.left{top:calc(env(safe-area-inset-top,0px) + 44px); bottom:0; left:0; width:64px;
-    background:linear-gradient(to right, var(--sky-top) 0, rgba(26,27,30,0) 100%);}
-  .edge-fade.right{top:calc(env(safe-area-inset-top,0px) + 44px); bottom:0; right:0; width:64px;
-    background:linear-gradient(to left, var(--sky-top) 0, rgba(26,27,30,0) 100%);}
-  @media(max-width:760px){.edge-fade{display:none;}}
 
-  /* ---- ramas de navegación: solo texto, coloreado por eje (bordes de pantalla, desktop) ---- */
-  .edge-branch{--c:var(--ink-dim); position:fixed; z-index:65; display:flex; align-items:center;
-    background:rgba(16,17,20,.5); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
-    border:1px solid var(--line-soft); border-radius:999px; cursor:pointer; padding:8px 14px; margin:0;
-    transition:border-color .2s;}
-  .edge-branch[data-dir="top"], .edge-branch[data-dir="bottom"]{--c:var(--ay);}
-  .edge-branch[data-dir="right"]{--c:var(--nav-red);}
-  .edge-branch[data-dir="left"]{--c:var(--az);}
-  .edge-branch.is-home{--c:var(--sel);}
-  .edge-branch .edge-label{font-family:'IBM Plex Mono',monospace; font-size:.76rem; white-space:nowrap;
-    color:var(--c); transition:color .2s;}
-  .edge-branch:hover, .edge-branch:focus-visible{border-color:var(--c);}
-  .edge-branch:hover .nav-arrow, .edge-branch:focus-visible .nav-arrow{filter:brightness(1.3);}
-  .edge-branch[data-dir="right"]{right:16px; top:50%; transform:translateY(-50%); flex-direction:row-reverse;}
-  .edge-branch[data-dir="left"]{left:16px; top:50%; transform:translateY(-50%);}
-  .edge-branch[data-dir="top"]{top:calc(env(safe-area-inset-top,0px) + 54px); left:50%; transform:translateX(-50%); flex-direction:column;}
-  .edge-branch[data-dir="bottom"]{bottom:16px; left:50%; transform:translateX(-50%); flex-direction:column-reverse;}
-  @media(max-width:760px){.edge-branch{display:none;}}
+  /* ---- barra de navegación: una sola fila abajo, con un color propio por sección ---- */
+  .bottom-nav{position:fixed; left:50%; bottom:16px; transform:translateX(-50%); z-index:65;
+    display:flex; gap:7px; max-width:calc(100vw - 24px); overflow-x:auto; padding:7px;
+    background:rgba(16,17,20,.6); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border:1px solid var(--line-soft); border-radius:999px;}
+  .bottom-nav::-webkit-scrollbar{display:none;}
+  .bottom-nav button{--c:var(--ink-dim); flex:none; border:1px solid var(--line); background:transparent;
+    color:var(--c); font-family:'IBM Plex Mono',monospace; font-size:.74rem; padding:8px 15px;
+    border-radius:999px; cursor:pointer; white-space:nowrap; transition:background .2s, color .2s, border-color .2s;}
+  .bottom-nav button[data-face="inicio"]{--c:var(--sel);}
+  .bottom-nav button[data-face="sobre-mi"]{--c:var(--nav-red);}
+  .bottom-nav button[data-face="proyectos"]{--c:var(--az);}
+  .bottom-nav button[data-face="reel"]{--c:var(--ay);}
+  .bottom-nav button[data-face="contacto"]{--c:var(--ax);}
+  .bottom-nav button:hover{border-color:var(--c);}
+  .bottom-nav button.is-active{background:var(--c); border-color:var(--c); color:#12131a; font-weight:600;}
+  @media(max-width:480px){.bottom-nav{gap:4px; padding:5px;} .bottom-nav button{padding:6px 10px; font-size:.66rem;}}
+  @media(max-width:360px){.bottom-nav button{padding:6px 8px; font-size:.62rem;}}
 
-  /* ---- nav móvil ---- */
-  .mobile-nav{display:none; position:fixed; left:0; right:0; bottom:0; z-index:60; gap:6px; overflow-x:auto;
-    padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--line);}
-  .mobile-nav button{flex:none; border:1px solid var(--line); background:transparent; color:var(--ink-dim);
-    font-size:.72rem; padding:7px 12px; border-radius:2px;}
-  .mobile-nav button.is-active{color:var(--sel); border-color:var(--sel);}
-  @media(max-width:760px){.mobile-nav{display:flex;}}
+  /* ---- hero: texto a la izquierda, cartelera de proyectos a la derecha ---- */
+  .hero-grid{display:grid; grid-template-columns:1fr 250px; gap:56px; align-items:start;}
+  @media(max-width:900px){.hero-grid{grid-template-columns:1fr; gap:32px;}}
+  .hero-text{min-width:0;}
 
   .kicker{font-size:.78rem; color:var(--sel); margin:0 0 14px;}
-  h1{font-size:clamp(2rem,5.2vw,3.4rem); font-weight:500; margin:0 0 14px; max-width:16ch; letter-spacing:-.01em;}
+  h1{font-size:clamp(1.35rem,2.1vw,1.8rem); font-weight:500; margin:0 0 14px; max-width:36ch; line-height:1.35; letter-spacing:-.005em;}
   .tag{color:var(--ink-dim); max-width:44ch; margin:0 0 20px; font-size:1rem;}
   .status{display:flex; align-items:center; gap:9px; font-size:.78rem; color:var(--ink-dim); margin:0 0 24px;}
   .status-dot{width:7px; height:7px; border-radius:50%; background:var(--sel); box-shadow:0 0 0 3px rgba(94,200,245,.2); flex:none;}
   .cta-row{display:flex; gap:12px; flex-wrap:wrap;}
+  .cta-row-hero{justify-content:center; align-items:center; margin:46px 0 0;}
+  @media(max-width:480px){.cta-row-hero{flex-direction:column; align-items:stretch;} .cta-row-hero .btn{text-align:center;}}
   .btn{display:inline-block; padding:10px 20px; font-size:.85rem; text-decoration:none; border:1px solid var(--line);
     font-family:'IBM Plex Mono',monospace; border-radius:2px; cursor:pointer; background:transparent; color:var(--ink);}
   .btn.solid{background:var(--sel); color:#1c1c1c; border-color:var(--sel); font-weight:500;}
   .btn.ghost:hover{border-color:var(--ink-dim);}
+
+  /* ---- banner de proyectos en formato cartelera (2:3, igual que los pósters de "proyectos") ----
+     Rota solo, alimentado por PROJECTS.profesional (ver script más abajo). */
+  .home-banner{position:relative; width:100%; aspect-ratio:2/3; border:1px solid var(--line); border-radius:4px;
+    overflow:hidden; background:rgba(0,0,0,.25); cursor:pointer; box-shadow:0 16px 34px rgba(0,0,0,.35);}
+  .home-banner:focus-visible{outline:1px solid var(--sel); outline-offset:2px;}
+  @media(max-width:900px){.home-banner{max-width:220px; margin:0 auto;}}
+  .home-banner-track{position:absolute; inset:0;}
+  .home-banner-slide{position:absolute; inset:0; background-size:cover; background-position:center;
+    opacity:0; transition:opacity 1.1s ease; border-top:2px solid var(--slide-color, var(--sel));}
+  .home-banner-slide.is-active{opacity:1;}
+  .home-banner-slide::after{content:''; position:absolute; inset:0;
+    background:linear-gradient(0deg, rgba(10,11,13,.94) 0%, rgba(10,11,13,.38) 38%, rgba(10,11,13,0) 62%);}
+  .home-banner-hint{position:absolute; top:10px; left:10px; z-index:2; font-size:.6rem; color:rgba(232,232,230,.85);
+    background:rgba(10,11,13,.55); padding:3px 6px; border-radius:2px; backdrop-filter:blur(3px);}
+  .home-banner-dots{position:absolute; top:11px; right:10px; z-index:2; display:flex; gap:5px;
+    background:rgba(10,11,13,.5); padding:5px 6px; border-radius:8px; backdrop-filter:blur(3px);}
+  .home-banner-dots span{width:4px; height:4px; border-radius:50%; background:rgba(255,255,255,.4);
+    transition:background .3s, transform .3s;}
+  .home-banner-dots span.is-active{background:var(--sel); transform:scale(1.5);}
+  .home-banner-info{position:absolute; left:0; right:0; bottom:0; z-index:2; padding:12px 14px;}
+  .home-banner-kicker{font-size:.6rem; letter-spacing:.03em; text-transform:uppercase; color:var(--ink-dim); margin:0 0 4px;}
+  .home-banner-info h3{margin:0; font-size:.94rem; font-weight:600; line-height:1.3;}
+  .home-banner-info p:not(.home-banner-kicker){margin:3px 0 0; font-size:.7rem; color:var(--ink-dim); line-height:1.4;}
+  .home-banner-cta{position:absolute; bottom:11px; right:12px; z-index:2; font-size:.6rem; color:var(--ink-dim); opacity:.85;}
 
   .sec-head{display:flex; align-items:center; gap:12px; margin-bottom:36px;}
   .sec-head .tag01{font-family:'IBM Plex Mono',monospace; color:var(--sel); font-size:.85rem;}
@@ -243,30 +258,14 @@
   <path id="curve-az" fill="none" stroke="var(--az)" stroke-width="2.5" opacity=".55" stroke-linejoin="round" stroke-linecap="round"/>
 </svg>
 
-<div class="edge-fade top" aria-hidden="true"></div>
 <div class="edge-fade bottom" aria-hidden="true"></div>
-<div class="edge-fade left" aria-hidden="true"></div>
-<div class="edge-fade right" aria-hidden="true"></div>
 
 <div class="topbar glass">
   <span class="mono brand">// alex_moreno.rig</span>
   <span class="mono current-face" id="current-face">VIEW · PERSP</span>
 </div>
 
-<button class="edge-branch" data-dir="right" data-branch="sobre-mi" type="button">
-  <span class="edge-label mono">sobre_mi</span>
-</button>
-<button class="edge-branch" data-dir="left" data-branch="proyectos" type="button">
-  <span class="edge-label mono">proyectos</span>
-</button>
-<button class="edge-branch" data-dir="top" data-branch="reel" type="button">
-  <span class="edge-label mono">reel</span>
-</button>
-<button class="edge-branch" data-dir="bottom" data-branch="contacto" type="button">
-  <span class="edge-label mono">contacto</span>
-</button>
-
-<nav class="mobile-nav glass" id="mobile-nav">
+<nav class="bottom-nav" id="bottom-nav">
   <button data-face="inicio" type="button">inicio</button>
   <button data-face="sobre-mi" type="button">sobre_mi</button>
   <button data-face="proyectos" type="button">proyectos</button>
@@ -279,13 +278,33 @@
 
     <div class="face is-active" id="face-inicio">
       <div class="wrap">
-        <p class="kicker mono">ANIMADOR DE PERSONAJES 3D · LARGOMETRAJES Y SERIES</p>
-        <h1>Doy vida a personajes, fotograma a fotograma.</h1>
-        <p class="tag">Portfolio con mis últimos trabajos, créditos de producción y reel — incluyendo escenas aún no publicadas bajo NDA.</p>
-        <p class="status mono"><span class="status-dot"></span>[Edita esto] Disponible para nuevos proyectos</p>
-        <div class="cta-row">
-          <button class="btn solid" data-face="reel" type="button">ver_reel()</button>
+        <div class="hero-grid">
+          <div class="hero-text">
+            <p class="kicker mono">ANIMADOR DE PERSONAJES 3D · LARGOMETRAJES Y SERIES</p>
+            <h1>Soy Alex, animador de personajes 3D. Animo personajes para cine y series.</h1>
+            <p class="tag">Este es un pequeño vistazo a mi trabajo, mi experiencia y algunos de los proyectos en los que he tenido la oportunidad de participar.</p>
+            <p class="status mono"><span class="status-dot"></span>Disponible para nuevos proyectos</p>
+          </div>
+
+          <!-- Banner de proyectos en formato cartelera (mismo 2:3 que los pósters de "proyectos"),
+               se rellena solo desde PROJECTS.profesional (ver script más abajo). Añadir un
+               proyecto nuevo ahí lo añade aquí también, sin tocar este bloque. -->
+          <div class="home-banner" id="home-banner">
+            <p class="home-banner-hint mono">// proyectos recientes</p>
+            <div class="home-banner-track" id="home-banner-track"></div>
+            <div class="home-banner-dots" id="home-banner-dots"></div>
+            <div class="home-banner-info">
+              <p class="home-banner-kicker mono" id="home-banner-kicker"></p>
+              <h3 id="home-banner-title"></h3>
+              <p id="home-banner-sub"></p>
+            </div>
+            <p class="home-banner-cta mono">ver_proyecto() →</p>
+          </div>
+        </div>
+
+        <div class="cta-row cta-row-hero">
           <a class="btn ghost" href="#" id="cv-link">descargar_cv()</a>
+          <button class="btn solid" data-face="reel" type="button">ver_reel()</button>
           <button class="btn ghost" data-face="contacto" type="button">contactar()</button>
         </div>
       </div>
@@ -518,6 +537,20 @@ function xform(dx,dy,axis,deg,scale){
   return `translate(${ox}px, ${oy}px) rotate${axis}(${deg}deg) scale(${scale})`;
 }
 let activeFace = 'inicio';
+// Mientras una cara con scroll propio se anima (escala/gira al entrar o salir), su barra de
+// scroll nativa se deforma y "se desliza" hacia el centro con ella — se ve fatal. La arreglamos
+// ocultando el scroll justo durante esos ~0.55s, y devolviéndolo en cuanto la cara se queda quieta.
+function hideScrollDuringTransition(el){
+  el.style.overflow = 'hidden';
+  clearTimeout(el._scrollFixTimer);
+  const restore = (e) => {
+    if (e && (e.target !== el || e.propertyName !== 'transform')) return;
+    el.style.overflow = '';
+    el.removeEventListener('transitionend', restore);
+  };
+  el.addEventListener('transitionend', restore);
+  el._scrollFixTimer = setTimeout(restore, 650); // red de seguridad si transitionend no llega
+}
 function navigateTo(face){
   if (face === activeFace || !ENTRY[face]) return;
   const cfg = ENTRY[face];
@@ -527,6 +560,7 @@ function navigateTo(face){
   inEl.style.transition = 'none';
   inEl.style.transform = xform(cfg.dx, cfg.dy, cfg.axis, cfg.deg, cfg.scale);
   inEl.style.opacity = '0';
+  hideScrollDuringTransition(inEl);
   void inEl.offsetHeight;
   inEl.style.transition = '';
   inEl.style.pointerEvents = 'auto';
@@ -534,6 +568,7 @@ function navigateTo(face){
   requestAnimationFrame(()=>{
     inEl.style.transform = 'none';
     inEl.style.opacity = '1';
+    hideScrollDuringTransition(outEl);
     outEl.style.transform = xform(-cfg.dx, -cfg.dy, cfg.axis, cfg.deg, cfg.scale);
     outEl.style.opacity = '0';
     outEl.style.pointerEvents = 'none';
@@ -543,7 +578,6 @@ function navigateTo(face){
   document.querySelectorAll('[data-face]').forEach(el=> el.classList.toggle('is-active', el.dataset.face === face));
   pulseCurve(cfg.curve);
   activeFace = face;
-  updateBranches();
   setHashForFace(face);
 }
 
@@ -575,32 +609,11 @@ function jumpToFaceInstant(face){
   document.getElementById('current-face').textContent = cfg.label;
   document.querySelectorAll('[data-face]').forEach(el=> el.classList.toggle('is-active', el.dataset.face === face));
   activeFace = face;
-  updateBranches();
 }
 window.addEventListener('resize', ()=>{});
 document.querySelectorAll('[data-face]').forEach(el=>{
   el.addEventListener('click', ()=> navigateTo(el.dataset.face));
 });
-
-// ---------- Ramas de navegación (bordes de pantalla) ----------
-// Cada rama vive siempre en el mismo borde/color; si ya estás en su departamento,
-// se convierte en el camino de vuelta a inicio (mismo sitio, mismo color, otro destino).
-function updateBranches(){
-  document.querySelectorAll('.edge-branch').forEach(btn=>{
-    const target = btn.dataset.branch;
-    const isHome = activeFace === target;
-    btn.classList.toggle('is-home', isHome);
-    btn.querySelector('.edge-label').textContent = isHome ? '◂ inicio' : target.replace('-', '_');
-    btn.setAttribute('aria-label', isHome ? 'Volver a inicio' : ('Ir a ' + target.replace('-', '_')));
-  });
-}
-document.querySelectorAll('.edge-branch').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const target = btn.dataset.branch;
-    navigateTo(activeFace === target ? 'inicio' : target);
-  });
-});
-updateBranches();
 
 // Si la página se abre con un enlace directo, saltamos ahí sin pasar por la portada.
 // Admite dos formas del mismo enlace:
@@ -814,6 +827,78 @@ function initCarousel(key, data){
 }
 initCarousel('profesional', PROJECTS.profesional);
 initCarousel('personal', PROJECTS.personal);
+
+// ---------- Banner de portada: rota sola por los proyectos ----------
+// Lee directamente de PROJECTS.profesional (arriba). No hay que tocar nada de aquí abajo
+// al añadir un proyecto nuevo: en cuanto tenga imagen (campo img), el banner lo incluye solo.
+function initHomeBanner(){
+  const el = document.getElementById('home-banner');
+  if (!el) return;
+  const slidesData = PROJECTS.profesional.filter(p => p.img);
+  if (slidesData.length < 1) { el.hidden = true; return; }
+
+  const track = document.getElementById('home-banner-track');
+  const dotsWrap = document.getElementById('home-banner-dots');
+  const kickerEl = document.getElementById('home-banner-kicker');
+  const titleEl = document.getElementById('home-banner-title');
+  const subEl = document.getElementById('home-banner-sub');
+
+  const layers = slidesData.map(p => {
+    const d = document.createElement('div');
+    d.className = 'home-banner-slide';
+    d.style.backgroundImage = `url("${p.img}")`;
+    d.style.setProperty('--slide-color', p.color || 'var(--sel)');
+    track.appendChild(d);
+    return d;
+  });
+  const dots = slidesData.map((p, i) => {
+    const dot = document.createElement('span');
+    dot.addEventListener('click', (e) => { e.stopPropagation(); goTo(i); });
+    dotsWrap.appendChild(dot);
+    return dot;
+  });
+  if (slidesData.length < 2) dotsWrap.style.display = 'none';
+
+  let current = 0;
+  let timer = null;
+  const INTERVAL = 4500;
+
+  function render(i){
+    current = i;
+    layers.forEach((l, idx) => l.classList.toggle('is-active', idx === i));
+    dots.forEach((d, idx) => d.classList.toggle('is-active', idx === i));
+    const p = slidesData[i];
+    kickerEl.textContent = p.studio + ' · ' + p.year;
+    titleEl.textContent = p.title;
+    subEl.textContent = p.role || '';
+  }
+  function next(){ render((current + 1) % slidesData.length); }
+  function startAuto(){
+    if (reduceMotion || slidesData.length < 2) return;
+    clearInterval(timer);
+    timer = setInterval(next, INTERVAL);
+  }
+  function goTo(i){ render(i); startAuto(); }
+
+  render(0);
+  startAuto();
+  el.addEventListener('mouseenter', () => clearInterval(timer));
+  el.addEventListener('mouseleave', startAuto);
+
+  function openCurrent(){
+    const p = slidesData[current];
+    navigateTo('proyectos');
+    setTimeout(() => openModal(p), 60);
+  }
+  el.setAttribute('role', 'button');
+  el.setAttribute('tabindex', '0');
+  el.setAttribute('aria-label', 'Ver proyectos');
+  el.addEventListener('click', openCurrent);
+  el.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCurrent(); }
+  });
+}
+initHomeBanner();
 
 </script>
 
