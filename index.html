@@ -179,6 +179,9 @@
   .detail-panel.detail-grid{display:grid; grid-template-columns:150px 1fr; gap:26px; max-width:660px;}
   .detail-poster{aspect-ratio:2/3; background-size:cover; background-position:center; border:1px solid var(--line); border-radius:3px; box-shadow:0 12px 26px rgba(0,0,0,.35);}
   @media(max-width:640px){.detail-panel.detail-grid{grid-template-columns:1fr;} .detail-poster{width:140px;}}
+  .detail-trailer{max-width:660px; margin:22px 0 0;}
+  .detail-trailer-screen{aspect-ratio:16/9; border:1px solid var(--line); border-radius:3px; overflow:hidden; background:rgba(0,0,0,.25);}
+  .detail-trailer-screen iframe{width:100%; height:100%; border:0; display:block;}
   .proj-detail[hidden]{display:none;}
   .proj-detail.is-entering .detail-panel{opacity:0; transform:scale(.94) translateY(10px);}
 
@@ -371,6 +374,10 @@
               <p id="detail-desc"></p>
             </div>
           </div>
+          <div class="detail-trailer" id="detail-trailer" hidden>
+            <p class="proj-label mono">// tráiler</p>
+            <div class="detail-trailer-screen" id="detail-trailer-screen"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -391,7 +398,7 @@
           <div class="reel-info" id="reel-info" hidden>
             <h4>Proyecto sin anunciar</h4>
             <p>[Edita esto] Qué es este proyecto, mi rol concreto (p. ej. animación de personajes en tal secuencia), el estudio y el año — disponible bajo NDA hasta su estreno público.</p>
-            <p class="reel-fallback mono">Si no ves el vídeo aquí (bloqueo del entorno de vista previa): <a href="#" id="reel-fallback-link" target="_blank" rel="noopener">ábrelo en Drive</a></p>
+            <p class="reel-fallback mono">Si no ves el vídeo aquí (bloqueo del entorno de vista previa): <a href="#" id="reel-fallback-link" target="_blank" rel="noopener">ábrelo en YouTube</a></p>
           </div>
         </div>
       </div>
@@ -571,17 +578,12 @@ window.addEventListener('keydown', (e)=>{
 
 // ---------- NDA ----------
 const NDA_PASSWORD = "hola";
-// --- Vídeo NDA vía Google Drive (enlace estable aunque sustituyas el archivo) ---
-// 1. Sube el vídeo a Google Drive.
-// 2. Clic derecho → Compartir → "Cualquier persona con el enlace" → Lector.
-// 3. Copia el enlace: tendrá esta forma → https://drive.google.com/file/d/AQUÍ_VA_EL_ID/view?usp=sharing
-//    El ID es la parte entre "/d/" y "/view". Pégalo abajo, en NDA_DRIVE_ID.
-// 4. Para renovar el vídeo más adelante SIN cambiar el enlace que ya enviaste:
-//    en Drive, clic derecho al archivo → "Administrar versiones" → "Subir nueva versión".
-//    El ID (y por tanto este enlace) no cambia nunca.
-const NDA_DRIVE_ID = "TU_ID_DE_DRIVE_AQUI";
-const NDA_EMBED_URL = `https://drive.google.com/file/d/${NDA_DRIVE_ID}/preview`;
-const NDA_FALLBACK_URL = `https://drive.google.com/file/d/${NDA_DRIVE_ID}/view`;
+// --- Vídeo NDA vía YouTube (enlace: https://youtu.be/dJw-I4L-00Y) ---
+// Para cambiar el vídeo más adelante, sustituye el ID de abajo por el de otro enlace de YouTube
+// (la parte final de youtu.be/AQUÍ_VA_EL_ID, o de youtube.com/watch?v=AQUÍ_VA_EL_ID).
+const NDA_YOUTUBE_ID = "dJw-I4L-00Y";
+const NDA_EMBED_URL = `https://www.youtube.com/embed/${NDA_YOUTUBE_ID}?autoplay=1&rel=0`;
+const NDA_FALLBACK_URL = `https://youtu.be/${NDA_YOUTUBE_ID}`;
 const reelScreen = document.getElementById('reel-screen');
 const reelInfo = document.getElementById('reel-info');
 const reelBtn = document.getElementById('reel-btn');
@@ -635,6 +637,15 @@ function openModal(p){
   const dpanel = document.getElementById('detail-panel');
   if (p.img) { dp.style.display=''; dp.style.backgroundImage = `url("${p.img}")`; dpanel.style.gridTemplateColumns=''; }
   else { dp.style.display='none'; dpanel.style.gridTemplateColumns='1fr'; }
+  const dTrailer = document.getElementById('detail-trailer');
+  const dTrailerScreen = document.getElementById('detail-trailer-screen');
+  if (p.trailer) {
+    dTrailerScreen.innerHTML = `<iframe src="https://www.youtube.com/embed/${p.trailer}" title="${p.title} — tráiler" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+    dTrailer.hidden = false;
+  } else {
+    dTrailerScreen.innerHTML = '';
+    dTrailer.hidden = true;
+  }
   document.querySelectorAll('.proj-panel').forEach(el=> el.style.display='none');
   projDetail.hidden = false;
   projDetail.classList.add('is-entering');
@@ -642,6 +653,7 @@ function openModal(p){
 }
 document.getElementById('detail-back').addEventListener('click', ()=>{
   projDetail.hidden = true;
+  document.getElementById('detail-trailer-screen').innerHTML = ''; // detiene la reproducción al volver
   document.querySelectorAll('.proj-panel').forEach(el=> el.style.display='');
 });
 
@@ -649,16 +661,16 @@ document.getElementById('detail-back').addEventListener('click', ()=>{
 const PROJECTS = {
   profesional: [
     {title:"Pikkuli and the Starlight Reindeer", studio:"B-Water Studios", role:"3D Character Animator · Teaser tráiler", year:"2026",
-     award:"Estreno en cines de Finlandia · 23 oct 2026", img:IMG.pikkuli, color:"var(--ax)",
+     award:"Estreno en cines de Finlandia · 23 oct 2026", img:IMG.pikkuli, color:"var(--ax)", trailer:"XoIuPfkofWI",
      desc:"Largometraje de animación de 80 minutos (Pikkuli ja Tähtipeura) basado en la serie infantil finlandesa Pikkuli. Combina fondos 2D pintados a mano con personajes 3D de aspecto peludo y tierno. Producido por AittoFlow y Filmkompaniet y dirigido por Metsämarja y Antti Aittokoski. La historia sigue a Pikkuli y sus amigos en una aventura invernal para encontrar al Reno Estelar y devolver la luz a la estrella mágica antes de Navidad. Mi trabajo: animación de personajes 3D en el teaser tráiler."},
     {title:"La sociedad de la nieve", studio:"MiopiaFX", role:"Artista de efectos visuales", year:"2023",
-     award:"12 premios Goya · 2 nominaciones al Óscar", img:IMG.sociedad, color:"var(--ay)",
+     award:"12 premios Goya · 2 nominaciones al Óscar", img:IMG.sociedad, color:"var(--ay)", trailer:"l9tP4M8URhQ",
      desc:"Película de J.A. Bayona para Netflix sobre la tragedia aérea de los Andes de 1972, adaptación del libro de Pablo Vierci. Arrasó en los Goya 2024 con doce premios, entre ellos Mejor Película, Dirección y Efectos Especiales, y fue nominada al Óscar a Mejor Película Internacional y a Mejor Maquillaje y Peluquería. Se estrenó en cines en diciembre de 2023 y en Netflix el 4 de enero de 2024."},
     {title:"Reina Roja", studio:"MiopiaFX", role:"Artista de efectos visuales", year:"2024",
-     award:"Estreno en Prime Video · 29 feb 2024", img:IMG.reina, color:"var(--az)",
+     award:"Estreno en Prime Video · 29 feb 2024", img:IMG.reina, color:"var(--az)", trailer:"bH1g07mBHGw",
      desc:"Serie de thriller de Prime Video dirigida por Koldo Serra, adaptación de la novela de Juan Gómez-Jurado, con Vicky Luengo y Hovik Keuchkerian. Antonia Scott, la persona más inteligente del mundo, se une a la policía para resolver un caso de secuestro en Madrid. Siete episodios."},
     {title:"Cóyotl: Héroe y Bestia", studio:"MiopiaFX", role:"Artista de efectos visuales", year:"2025",
-     award:"Estreno en Max · 27 feb 2025", img:IMG.coyotl, color:"var(--sel)",
+     award:"Estreno en Max · 27 feb 2025", img:IMG.coyotl, color:"var(--sel)", trailer:"lyLjkGjZpbg",
      desc:"Serie de acción y fantasía de Max protagonizada por Alejandro Speitzer. En el norte de México, Lupe se transforma en el Cóyotl, mitad hombre y mitad bestia, para proteger a su pueblo de la violencia de dos cárteles rivales. Mezcla mitología prehispánica y thriller contemporáneo. Ocho episodios."}
   ],
   personal: [
