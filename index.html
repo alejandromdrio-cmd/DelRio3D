@@ -44,7 +44,8 @@
   button{font-family:inherit;}
   .wrap{max-width:900px; margin:0 auto; padding:calc(140px + env(safe-area-inset-top,0px)) 24px 48px;}
   .wrap.wrap-reel{max-width:1180px;}
-  @media(min-width:761px){.wrap{padding:calc(144px + env(safe-area-inset-top,0px)) 128px 56px;}}
+  @media(min-width:761px){.wrap{padding:calc(120px + env(safe-area-inset-top,0px)) 128px 56px;}}
+  @media(min-width:761px) and (max-height:920px){.wrap{padding:calc(108px + env(safe-area-inset-top,0px)) 128px 40px;}}
   @media(max-width:640px){.wrap{padding:calc(122px + env(safe-area-inset-top,0px)) 18px 60px;}}
   .glass{background:var(--panel); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);}
   :focus-visible{outline:2px solid var(--sel); outline-offset:2px;}
@@ -193,12 +194,20 @@
   .chan-row .k{padding:10px 12px; color:var(--ink-dim); font-family:'IBM Plex Mono',monospace; border-right:1px solid var(--line-soft);}
   .chan-row .v{padding:10px 12px;}
 
-  .proj-panel{margin-bottom:36px;}
-  .proj-label{color:var(--ink-dim); font-size:.75rem; margin:0 0 10px;}
+  .proj-panel{margin-bottom:8px;}
+  .proj-label{color:var(--ink-dim); font-size:.75rem; margin:0 0 6px;}
+  .proj-count{opacity:.55;}
+  .proj-sec-head{margin-bottom:10px;}
+  .proj-intro{margin:0 0 14px; max-width:none; font-size:.92rem;}
+  @media(max-height:920px){
+    .proj-panel{margin-bottom:2px;} .proj-label{margin-bottom:2px;}
+    .proj-sec-head{margin-bottom:2px;} .proj-intro{margin-bottom:6px;}
+  }
   .carousel-wrap{display:flex; align-items:center; gap:10px;}
   .car-nav{border:1px solid var(--line); border-radius:2px; color:var(--ink); width:34px; height:34px; font-size:1.1rem; cursor:pointer; flex:none; background:transparent;}
   .car-nav:hover{border-color:var(--sel); color:var(--sel);}
-  .stage2{flex:1; height:330px; perspective:1200px; position:relative; overflow:hidden;}
+  .stage2{flex:1; height:320px; perspective:1200px; position:relative; overflow:hidden;}
+  @media(max-height:920px){.stage2{height:316px;}}
   .ring{position:absolute; top:50%; left:50%; width:0; height:0; transform-style:preserve-3d;}
   .proj-card{position:absolute; top:0; left:0; width:180px; height:270px; margin:-135px 0 0 -90px;
     border:1px solid var(--line); border-radius:3px; padding:16px;
@@ -213,20 +222,15 @@
   .proj-card h3{position:relative; margin:0 0 4px; font-size:1rem; line-height:1.2;}
   .proj-card p{position:relative; margin:0; font-size:.74rem; color:var(--ink-dim);}
   .proj-card.is-active{border-color:var(--sel);}
-  .car-dots{display:flex; gap:7px; margin-top:14px; padding-left:44px;}
+  .car-dots-row{display:flex; align-items:center; gap:16px; margin-top:5px; padding-left:44px;}
+  @media(max-height:920px){.car-dots-row{margin-top:2px;}}
+  .car-dots{display:flex; gap:7px; flex:none;}
   .car-dot{width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.2); border:none; cursor:pointer; padding:0;}
   .car-dot.is-active{background:var(--sel);}
+  .car-caption{margin:0; font-size:.72rem; color:var(--ink-dim); white-space:nowrap; overflow:hidden;
+    text-overflow:ellipsis; flex:1; min-width:0; text-align:right;}
+  @media(max-width:640px){.car-dots-row{padding-left:0;}}
 
-  /* ---- info del proyecto activo del carrusel: se actualiza sola al navegar, sin necesidad de
-     entrar en la ficha completa, para que la sección no se sienta tan vacía. ---- */
-  .proj-info{margin:18px 0 0 44px; padding:18px 20px; max-width:520px; border-radius:4px;
-    transition:opacity .25s ease;}
-  .proj-info .info-meta{margin:0 0 6px; color:var(--sel);}
-  .proj-info .info-title{margin:0 0 6px; font-size:1.1rem; font-weight:500;}
-  .proj-info .info-role{margin:0 0 10px; font-size:.8rem; color:var(--ink-dim);}
-  .proj-info .info-desc{margin:0; font-size:.85rem; color:var(--ink-dim); line-height:1.5;
-    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
-  @media(max-width:640px){.proj-info{margin-left:0; max-width:none;}}
 
   .detail-back{margin-bottom:28px;}
   .detail-panel{border:1px solid var(--line); border-radius:2px; padding:32px; max-width:520px;
@@ -482,36 +486,31 @@
     </div>
 
     <div class="face" id="face-proyectos">
-      <div class="wrap">
-        <div class="sec-head"><span class="tag01 mono">−X</span><h2>proyectos</h2></div>
+      <div class="wrap wrap-reel">
+        <div class="sec-head proj-sec-head"><span class="tag01 mono">−X</span><h2>proyectos</h2></div>
+        <p class="tag proj-intro">Trabajos profesionales — largometrajes y series — y ejercicios personales de animación.</p>
         <div class="proj-panel" id="panel-profesional">
-          <p class="proj-label mono">// profesional</p>
+          <p class="proj-label mono">// profesional <span class="proj-count" id="count-profesional"></span></p>
           <div class="carousel-wrap">
             <button class="car-nav" id="prev-profesional" type="button">‹</button>
             <div class="stage2" id="stage-profesional"><div class="ring" id="ring-profesional"></div></div>
             <button class="car-nav" id="next-profesional" type="button">›</button>
           </div>
-          <div class="car-dots" id="dots-profesional"></div>
-          <div class="proj-info glass" id="info-profesional">
-            <p class="mono info-meta" id="info-profesional-meta"></p>
-            <h3 class="info-title" id="info-profesional-title"></h3>
-            <p class="mono info-role" id="info-profesional-role"></p>
-            <p class="info-desc" id="info-profesional-desc"></p>
+          <div class="car-dots-row">
+            <div class="car-dots" id="dots-profesional"></div>
+            <p class="car-caption mono" id="caption-profesional"></p>
           </div>
         </div>
         <div class="proj-panel" id="panel-personal">
-          <p class="proj-label mono">// personal</p>
+          <p class="proj-label mono">// personal <span class="proj-count" id="count-personal"></span></p>
           <div class="carousel-wrap">
             <button class="car-nav" id="prev-personal" type="button">‹</button>
             <div class="stage2" id="stage-personal"><div class="ring" id="ring-personal"></div></div>
             <button class="car-nav" id="next-personal" type="button">›</button>
           </div>
-          <div class="car-dots" id="dots-personal"></div>
-          <div class="proj-info glass" id="info-personal">
-            <p class="mono info-meta" id="info-personal-meta"></p>
-            <h3 class="info-title" id="info-personal-title"></h3>
-            <p class="mono info-role" id="info-personal-role"></p>
-            <p class="info-desc" id="info-personal-desc"></p>
+          <div class="car-dots-row">
+            <div class="car-dots" id="dots-personal"></div>
+            <p class="car-caption mono" id="caption-personal"></p>
           </div>
         </div>
 
@@ -1072,15 +1071,12 @@ const PROJECTS = {
     {title:"Test de animación", studio:"Personal", role:"Animador", year:"2022", award:"", desc:"[Edita esto] Descripción.", color:"var(--ax)"}
   ]
 };
-// Rellena el bloque "// info" de cada panel de proyectos con los datos del proyecto activo del
-// carrusel — así se ve algo más al navegar, sin tener que entrar a la ficha completa.
+// Actualiza la línea de texto junto a los puntos del carrusel con el proyecto activo — un solo
+// renglón (título — estudio, año), sin ocupar el espacio del bloque de info que había antes.
 function updateInfo(key, p){
-  const meta = document.getElementById('info-'+key+'-meta');
-  if (!meta || !p) return;
-  meta.innerHTML = colorStudios(p.studio) + (p.year ? ' · ' + p.year : '');
-  document.getElementById('info-'+key+'-title').textContent = p.title;
-  document.getElementById('info-'+key+'-role').textContent = p.role || '';
-  document.getElementById('info-'+key+'-desc').textContent = p.desc || '';
+  const cap = document.getElementById('caption-'+key);
+  if (!cap || !p) return;
+  cap.textContent = p.title + (p.studio ? ' — ' + p.studio : '') + (p.year ? ', ' + p.year : '');
 }
 function initCarousel(key, data){
   const ring = document.getElementById('ring-'+key);
@@ -1088,6 +1084,8 @@ function initCarousel(key, data){
   const n = data.length;
   let current = 0;
   ring.innerHTML=''; dots.innerHTML='';
+  const countEl = document.getElementById('count-'+key);
+  if (countEl) countEl.textContent = '— ' + n + (n===1 ? ' proyecto' : ' proyectos');
   data.forEach((p,i)=>{
     const card=document.createElement('div');
     card.className='proj-card';
@@ -1120,16 +1118,29 @@ function initCarousel(key, data){
     if (d < -n/2) d += n;
     return d;
   }
+  // Escala de cada ficha según su distancia al centro (la activa destaca más, 1.16, el resto se
+  // va reduciendo). La posición horizontal se calcula a partir del ancho real de cada ficha ya
+  // escalada (con un solape constante entre ellas) en vez de un espaciado fijo — así el hueco
+  // entre fichas no crece a medida que se alejan del centro y se hacen más pequeñas.
+  const CARD_HALF = 90; // mitad del ancho base de la ficha (180px)
+  const scaleForDist = (dist) => dist===0 ? 1.16 : 1-dist*0.14;
   function render(){
     const spacing = window.innerWidth < 640 ? 120 : 160;
+    const overlap = CARD_HALF*scaleForDist(0) + CARD_HALF*scaleForDist(1) - spacing;
+    const posForDist = (dist) => {
+      let pos = 0;
+      for (let d=1; d<=dist; d++) pos += CARD_HALF*scaleForDist(d-1) + CARD_HALF*scaleForDist(d) - overlap;
+      return pos;
+    };
     [...ring.children].forEach((c,i)=>{
       const delta=circDelta(i), dist=Math.min(Math.abs(delta),3);
       const rot = delta===0?0:(delta>0?-28:28);
       // El proyecto seleccionado (delta===0) se escala por encima de su tamaño base (antes se
       // quedaba igual, en 1) para que destaque con más presencia sobre los demás.
-      const sc = delta===0 ? 1.16 : 1-dist*0.14;
-      c.style.transform=`translateX(${delta*spacing}px) rotateY(${rot}deg) scale(${sc})`;
-      const vis = ring.parentElement.clientWidth/2 - (Math.abs(delta)*spacing - 90);
+      const sc = scaleForDist(dist);
+      const x = Math.sign(delta) * posForDist(dist);
+      c.style.transform=`translateX(${x}px) rotateY(${rot}deg) scale(${sc})`;
+      const vis = ring.parentElement.clientWidth/2 - (Math.abs(x) - 90);
       c.style.opacity = vis < 70 ? 0 : Math.max(dist===0?1:1-dist*0.28, 0.18);
       c.style.pointerEvents = vis < 70 ? 'none' : '';
       c.style.zIndex=100-dist;
