@@ -60,10 +60,29 @@
   .scene{position:fixed; inset:0; perspective:1500px;}
   .cube{position:absolute; inset:0;}
   .face{position:absolute; inset:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
     opacity:0; pointer-events:none;
     transition:transform .55s cubic-bezier(.22,.68,.32,1), opacity .48s ease;}
   .reduce-motion .face{transition:none;}
+  /* La barra nativa del navegador la ocultamos del todo (se ve/desaparece de golpe y no se puede
+     animar bien) y la sustituimos por un "thumb" propio (#scroll-thumb, ver más abajo) que
+     posicionamos y coloreamos por JS según la sección activa, y que sí podemos desvanecer
+     suavemente en vez de que aparezca de golpe. */
+  .face::-webkit-scrollbar{display:none;}
+  #face-inicio{--rail:rgba(94,200,245,.4); --rail-hover:var(--sel);}
+  #face-sobre-mi{--rail:rgba(224,85,74,.4); --rail-hover:var(--nav-red);}
+  #face-proyectos{--rail:rgba(74,144,217,.4); --rail-hover:var(--az);}
+  #face-reel{--rail:rgba(76,195,138,.4); --rail-hover:var(--ay);}
+  #face-contacto{--rail:rgba(232,121,74,.4); --rail-hover:var(--ax);}
   #face-inicio{opacity:1; pointer-events:auto;}
+
+  /* ---- scrollbar propia: mismo look de antes (fina, minimalista, coloreada por sección) pero
+     con un fundido de opacidad real al aparecer/desaparecer en vez del "golpe" nativo. ---- */
+  .scroll-thumb{position:fixed; right:4px; width:5px; border-radius:999px; z-index:66;
+    background:var(--rail,var(--line)); opacity:0; pointer-events:none;
+    transition:opacity .5s ease, background-color .2s ease;}
+  .scroll-thumb.is-visible{opacity:1;}
+  .reduce-motion .scroll-thumb{transition:none;}
 
   /* ---- degradado inferior: la página se difumina antes de llegar a la barra de navegación ---- */
   .edge-fade{position:fixed; z-index:40; pointer-events:none;}
@@ -324,6 +343,8 @@
   <button data-face="reel" type="button">reel</button>
   <button data-face="contacto" type="button">contacto</button>
 </nav>
+
+<div id="scroll-thumb" class="scroll-thumb" aria-hidden="true"></div>
 
 <div class="scene">
   <div class="cube" id="cube">
@@ -648,6 +669,61 @@ function hideScrollDuringTransition(el){
   el.addEventListener('transitionend', restore);
   el._scrollFixTimer = setTimeout(restore, 650); // red de seguridad si transitionend no llega
 }
+// ---------- Barra de scroll propia ----------
+// La nativa la ocultamos por completo (arriba, ::-webkit-scrollbar{display:none}) porque no se
+// puede animar bien: aparece/desaparece de golpe en cuanto el contenido pasa a ser desplazable.
+// En su lugar movemos y coloreamos este único "thumb" (#scroll-thumb) por JS según la sección
+// activa, y controlamos su opacidad nosotros — así sí se desvanece suave, nunca de golpe.
+const scrollThumb = document.getElementById('scroll-thumb');
+let scrollThumbHideTimer = null;
+const SCROLLBAR_TRACK_TOP = 54, SCROLLBAR_TRACK_BOTTOM = 112; // deja libres topbar y nav inferior
+function updateScrollThumb(el){
+  if (!scrollThumb || !el) return;
+  const scrollable = el.scrollHeight - el.clientHeight;
+  if (scrollable <= 4) { scrollThumb.classList.remove('is-visible'); return; }
+  const trackH = Math.max(40, window.innerHeight - SCROLLBAR_TRACK_TOP - SCROLLBAR_TRACK_BOTTOM);
+  const ratio = el.clientHeight / el.scrollHeight;
+  const thumbH = Math.max(28, trackH * ratio);
+  const maxTop = trackH - thumbH;
+  const top = SCROLLBAR_TRACK_TOP + maxTop * (el.scrollTop / scrollable);
+  scrollThumb.style.height = thumbH + 'px';
+  scrollThumb.style.top = top + 'px';
+  const rail = getComputedStyle(el).getPropertyValue('--rail').trim();
+  const railHover = getComputedStyle(el).getPropertyValue('--rail-hover').trim();
+  if (rail) scrollThumb.style.setProperty('--rail', rail);
+  if (railHover) scrollThumb.style.setProperty('--rail-hover', railHover);
+}
+function revealScrollThumbThenFade(delay){
+  if (!scrollThumb) return;
+  scrollThumb.classList.add('is-visible');
+  clearTimeout(scrollThumbHideTimer);
+  scrollThumbHideTimer = setTimeout(()=> scrollThumb.classList.remove('is-visible'), delay || 900);
+}
+// Al cambiar de sección esperamos a que termine de entrar (misma duración que su transición de
+// opacidad/transform) antes de medir su altura real, y solo entonces la mostramos con un fundido
+// suave — así nunca coincide con el "golpe" de la propia transición de cara.
+function onFaceChanged(faceEl){
+  if (!scrollThumb || !faceEl) return;
+  clearTimeout(scrollThumbHideTimer);
+  scrollThumb.classList.remove('is-visible');
+  setTimeout(()=>{
+    updateScrollThumb(faceEl);
+    if (faceEl.scrollHeight - faceEl.clientHeight > 4) revealScrollThumbThenFade(1000);
+  }, 260);
+}
+document.querySelectorAll('.face').forEach(face=>{
+  face.addEventListener('scroll', ()=>{
+    if (face.id !== 'face-'+activeFace) return;
+    updateScrollThumb(face);
+    revealScrollThumbThenFade(800);
+  }, {passive:true});
+});
+window.addEventListener('resize', ()=>{
+  const el = document.getElementById('face-'+activeFace);
+  if (el) updateScrollThumb(el);
+});
+setTimeout(()=> onFaceChanged(document.getElementById('face-inicio')), 1800);
+
 function navigateTo(face){
   if (face === activeFace || !ENTRY[face]) return;
   const cfg = ENTRY[face];
@@ -678,6 +754,7 @@ function navigateTo(face){
   pulseCurve(cfg.curve);
   activeFace = face;
   setHashForFace(face);
+  onFaceChanged(inEl);
 }
 
 // ---------- Enlace directo a un departamento (deep link) ----------
@@ -688,7 +765,13 @@ function navigateTo(face){
 function setHashForFace(face){
   if (!history.replaceState) return;
   const hash = face === 'inicio' ? '' : ('#' + face);
-  history.replaceState(null, '', location.pathname + location.search + hash);
+  // En algunos entornos con restricciones (p.ej. la vista previa de artefactos, dentro de un
+  // iframe "about:srcdoc") el navegador no permite tocar la URL y lanza un SecurityError; en la
+  // web real desplegada esto nunca pasa. Lo envolvemos para que, si ocurre, simplemente no
+  // actualicemos el hash en vez de romper la navegación.
+  try {
+    history.replaceState(null, '', location.pathname + location.search + hash);
+  } catch (e) { /* entorno restringido: ignorar */ }
 }
 function jumpToFaceInstant(face){
   if (!ENTRY[face] || face === activeFace) return;
@@ -708,6 +791,7 @@ function jumpToFaceInstant(face){
   document.getElementById('current-face').textContent = cfg.label;
   document.querySelectorAll('[data-face]').forEach(el=> el.classList.toggle('is-active', el.dataset.face === face));
   activeFace = face;
+  onFaceChanged(inEl);
 }
 window.addEventListener('resize', ()=>{});
 document.querySelectorAll('[data-face]').forEach(el=>{
