@@ -1039,7 +1039,11 @@ reelPwToggle.addEventListener('click', () => {
 });
 
 function unlockReel(videoId){
-  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+  // "vq=hd1080" es un parámetro no oficial: le pide a YouTube que arranque en la máxima calidad
+  // en vez de la mínima por defecto. No está garantizado (YouTube puede ignorarlo o bajarlo si
+  // detecta poco ancho de banda), pero no tiene contra: mejora el arranque para la mayoría sin
+  // arriesgar nada para quien tenga conexión lenta.
+  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&vq=hd1080`;
   if (reelFallbackLink) reelFallbackLink.href = `https://youtu.be/${videoId}`;
 
   const lockUi = reelScreen.querySelector('.lock-ui');
@@ -1118,7 +1122,7 @@ function openModal(p){
   const dTrailerLabel = document.getElementById('detail-trailer-label');
   if (p.trailer) {
     dTrailerLabel.textContent = '// ' + (p.videoLabel || 'trailer');
-    dTrailerScreen.innerHTML = `<iframe src="https://www.youtube.com/embed/${p.trailer}" title="${p.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+    dTrailerScreen.innerHTML = `<iframe src="https://www.youtube.com/embed/${p.trailer}?vq=hd1080" title="${p.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
     dTrailer.hidden = false;
   } else {
     dTrailerScreen.innerHTML = '';
