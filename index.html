@@ -218,9 +218,16 @@
   .locked .thumb{display:flex; align-items:center; justify-content:center; background:repeating-linear-gradient(135deg, rgba(0,0,0,.25), rgba(0,0,0,.25) 9px, rgba(0,0,0,.4) 9px, rgba(0,0,0,.4) 18px);}
   .lock-ui{padding:14px; text-align:center; width:100%;}
   .eye-off{font-family:'IBM Plex Mono',monospace; font-size:.7rem; color:var(--ink-dim); margin-bottom:8px;}
-  .lock-ui input{width:100%; padding:8px 9px; margin:0 0 8px; background:rgba(0,0,0,.3); border:1px solid var(--line); color:var(--ink); font-size:.8rem; font-family:'IBM Plex Mono',monospace; border-radius:2px;}
+  .lock-ui input{width:100%; padding:8px 9px; margin:0; background:rgba(0,0,0,.3); border:1px solid var(--line); color:var(--ink); font-size:.8rem; font-family:'IBM Plex Mono',monospace; border-radius:2px;}
   .lock-ui button{width:100%; padding:8px; background:var(--az); border:none; color:#0e1116; font-weight:600; cursor:pointer; font-size:.78rem; font-family:'IBM Plex Mono',monospace; border-radius:2px;}
   .lock-msg{font-size:.7rem; color:var(--ax); margin-top:6px; min-height:1em;}
+  /* ---- campo de contraseña con botón de ver/ocultar dentro ---- */
+  .pw-field{position:relative; width:100%; margin:0 0 8px;}
+  .pw-field .pw-input{padding-right:46px; margin:0;}
+  .lock-ui .pw-field button.pw-toggle{position:absolute; right:4px; top:50%; transform:translateY(-50%);
+    width:auto; max-width:none; padding:5px 8px; background:transparent; color:var(--ink-dim);
+    font-weight:400; font-size:.66rem; border-radius:2px;}
+  .lock-ui .pw-field button.pw-toggle:hover{color:var(--ink);}
 
   /* ---- pantalla del reel: bloqueada → se abre y se extiende al validar la contraseña ---- */
   .reel-stage{display:flex; flex-direction:column; align-items:center;}
@@ -234,7 +241,7 @@
     justify-content:center; padding:26px; text-align:center; transition:opacity .35s ease;}
   .reel-screen .lock-ui .eye-off{margin-bottom:10px;}
   .reel-screen .lock-copy{margin:0 0 16px; font-size:.82rem; color:var(--ink-dim); max-width:34ch;}
-  .reel-screen .lock-ui input, .reel-screen .lock-ui button{max-width:260px;}
+  .reel-screen .lock-ui input, .reel-screen .lock-ui button, .reel-screen .lock-ui .pw-field{max-width:260px;}
   .reel-screen iframe{width:100%; height:100%; border:0; display:block;}
   .reel-screen .reel-iframe{opacity:0; transition:opacity .6s ease;}
   .reel-screen .reel-iframe.is-visible{opacity:1;}
@@ -319,16 +326,16 @@
             <div class="ph-placeholder">📷<br>Tu foto aquí<br>(retrato, formato 4:5)</div>
           </div>
           <div class="bio">
-            <p>Animador 3D de personajes. En 2026 trabajé en B-Water Studios como 3D Character Animator en el teaser de «Pikkuli and the Starlight Reindeer», un largometraje que combina fondos 2D pintados a mano con personajes 3D.</p>
-            <p>Antes, como artista de efectos visuales en MiopiaFX, participé en «La sociedad de la nieve», «Reina Roja» y «Cóyotl: Héroe y Bestia».</p>
+            <p>Animador 3D de personajes. En 2026 trabajé en <span style="color:var(--az)">B-Water Studios</span> como 3D Character Animator en «Pikkuli and the Starlight Reindeer», un largometraje que combina fondos 2D pintados a mano con personajes 3D.</p>
+            <p>Antes, como artista de efectos visuales en <span style="color:var(--ay)">MiopiaFX</span>, participé en «La sociedad de la nieve», «Reina Roja» y «Cóyotl: Héroe y Bestia».</p>
           </div>
         </div>
         <div class="channel glass">
-          <div class="chan-row"><span class="k">software</span><span class="v">Nuke, Adobe Photoshop, [+ añade más]</span></div>
-          <div class="chan-row"><span class="k">especialidad</span><span class="v">Animación de personajes 3D · VFX</span></div>
-          <div class="chan-row"><span class="k">experiencia</span><span class="v">B-Water Studios · MiopiaFX · USER T38</span></div>
-          <div class="chan-row"><span class="k">idiomas</span><span class="v">[Edita esto]</span></div>
-          <div class="chan-row"><span class="k">ubicación</span><span class="v">[Edita esto]</span></div>
+          <div class="chan-row"><span class="k">software</span><span class="v">Maya, Blender</span></div>
+          <div class="chan-row"><span class="k">especialidad</span><span class="v">Body mechanics · Animación cartoon</span></div>
+          <div class="chan-row"><span class="k">experiencia</span><span class="v"><span style="color:var(--az)">B-Water Studios</span> · <span style="color:var(--ay)">MiopiaFX</span> · <span style="color:var(--ax)">USER T38</span></span></div>
+          <div class="chan-row"><span class="k">idiomas</span><span class="v">Español, inglés</span></div>
+          <div class="chan-row"><span class="k">ubicación</span><span class="v">Tenerife · Madrid · Guadalajara — open to relocate</span></div>
         </div>
         <p class="exp-title mono">// experiencia</p>
         <div class="exp-list glass">
@@ -336,15 +343,15 @@
             <div class="exp-when mono">feb 2026 – jul 2026<br><span>6 meses</span></div>
             <div class="exp-main">
               <h3>Animador 3D</h3>
-              <p class="exp-co">B-Water Studios · Jornada completa · Presencial</p>
-              <p class="exp-note">Pikkuli and Starlight Reindeer – Teaser Trailer (2026) · 3D Character Animator</p>
+              <p class="exp-co"><span style="color:var(--az)">B-Water Studios</span> · Jornada completa · Presencial</p>
+              <p class="exp-note">Pikkuli and the Starlight Reindeer (2026) · 3D Character Animator</p>
             </div>
           </div>
           <div class="exp-row">
             <div class="exp-when mono">oct 2022 – ago 2023<br><span>11 meses</span></div>
             <div class="exp-main">
               <h3>Artista de efectos visuales</h3>
-              <p class="exp-co">MiopiaFX · Jornada completa · Madrid, España</p>
+              <p class="exp-co"><span style="color:var(--ay)">MiopiaFX</span> · Jornada completa · Madrid, España</p>
               <p class="exp-note">La sociedad de la nieve · Reina Roja · Cóyotl</p>
             </div>
           </div>
@@ -352,7 +359,7 @@
             <div class="exp-when mono">feb 2020 – jun 2020<br><span>5 meses</span></div>
             <div class="exp-main">
               <h3>Artista de efectos visuales</h3>
-              <p class="exp-co">USER T38 · Contrato de prácticas · Madrid, España</p>
+              <p class="exp-co"><span style="color:var(--ax)">USER T38</span> · Contrato de prácticas · Madrid, España</p>
               <p class="exp-note">Nuke, Adobe Photoshop y 5 aptitudes más</p>
             </div>
           </div>
@@ -404,14 +411,17 @@
 
     <div class="face" id="face-reel">
       <div class="wrap wrap-reel">
-        <div class="sec-head"><span class="tag01 mono">+Y</span><h2>reel</h2></div>
+        <div class="sec-head"><span class="tag01 mono">+Y</span><h2>Animation Demo Reel</h2></div>
         <div class="reel-stage">
           <div class="reel-screen locked" id="reel-screen">
             <div class="lock-ui">
               <div class="eye-off mono">// visibility: hidden — NDA</div>
-              <p class="lock-copy">Proyecto sin anunciar, disponible bajo contraseña para reclutadores y estudios.</p>
-              <input type="password" placeholder="contraseña" class="pw-input" id="reel-pw">
-              <button class="pw-btn" type="button" id="reel-btn">mostrar()</button>
+              <p class="lock-copy">Demo Reel de animación disponible bajo contraseña proporcionada para reclutadores y estudios.</p>
+              <div class="pw-field">
+                <input type="password" placeholder="contraseña" class="pw-input" id="reel-pw">
+                <button class="pw-toggle mono" type="button" id="reel-pw-toggle" aria-label="Mostrar contraseña">ver</button>
+              </div>
+              <button class="pw-btn" type="button" id="reel-btn">enviar()</button>
               <p class="lock-msg" id="reel-msg"></p>
             </div>
           </div>
@@ -439,8 +449,8 @@
         </div>
         <div class="foot-info">
           <p>¿Buscas animador de personajes para tu próximo proyecto?</p>
-          <p><a href="mailto:tu-email@ejemplo.com">tu-email@ejemplo.com</a></p>
-          <p><a href="#">ArtStation</a> · <a href="#">IMDb</a> · <a href="https://www.linkedin.com/in/alexmoreno3d/" target="_blank" rel="noopener">LinkedIn</a> · <a href="#">YouTube</a></p>
+          <p><a href="mailto:alejandro.mdrio@gmail.com">alejandro.mdrio@gmail.com</a></p>
+          <p><a href="https://www.linkedin.com/in/alexmoreno3d" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://youtube.com/@alexanimacion96" target="_blank" rel="noopener">YouTube</a></p>
           <p class="mono" style="color:var(--ink-dim); margin-top:24px;">© 2026 alex_moreno</p>
         </div>
       </div>
@@ -458,6 +468,15 @@ const CV_BASE64 = "JVBERi0xLjQKJfbk/N8KMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwovVmVyc
 </script>
 <script>
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Cada estudio tiene siempre el mismo color en toda la web, venga de donde venga el texto.
+function colorStudios(text){
+  if (!text) return text;
+  return text
+    .replace(/B-Water Studios/g, '<span style="color:var(--az)">B-Water Studios</span>')
+    .replace(/\bMiopiaFX\b/g, '<span style="color:var(--ay)">MiopiaFX</span>')
+    .replace(/\bUSER T38\b/g, '<span style="color:var(--ax)">USER T38</span>');
+}
 (function(){ const ph=document.getElementById('profile-photo'); if(ph && IMG.perfil){ ph.src=IMG.perfil; ph.style.display='block'; const pl=document.querySelector('.ph-placeholder'); if(pl) pl.style.display='none'; } })();
 (function(){ const cv=document.getElementById('cv-link'); if(cv && typeof CV_BASE64 !== 'undefined' && CV_BASE64){ cv.href = 'data:application/pdf;base64,' + CV_BASE64; cv.setAttribute('download','Alex_Moreno_CV_2026.pdf'); } })();
 if (reduceMotion) document.documentElement.classList.add('reduce-motion');
@@ -654,8 +673,17 @@ const reelScreen = document.getElementById('reel-screen');
 const reelInfo = document.getElementById('reel-info');
 const reelBtn = document.getElementById('reel-btn');
 const reelPw = document.getElementById('reel-pw');
+const reelPwToggle = document.getElementById('reel-pw-toggle');
 const reelMsg = document.getElementById('reel-msg');
 const reelFallbackLink = document.getElementById('reel-fallback-link');
+
+reelPwToggle.addEventListener('click', () => {
+  const showing = reelPw.type === 'text';
+  reelPw.type = showing ? 'password' : 'text';
+  reelPwToggle.textContent = showing ? 'ver' : 'ocultar';
+  reelPwToggle.setAttribute('aria-label', showing ? 'Mostrar contraseña' : 'Ocultar contraseña');
+  reelPw.focus();
+});
 
 function unlockReel(videoId){
   const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
@@ -723,7 +751,7 @@ reelPw.addEventListener('keydown', e => { if (e.key === 'Enter') checkReelPasswo
 // ---------- Ficha de detalle de proyecto (dentro de la cara de proyectos) ----------
 const projDetail = document.getElementById('proj-detail');
 function openModal(p){
-  document.getElementById('detail-meta').textContent = p.studio + ' · ' + p.year;
+  document.getElementById('detail-meta').innerHTML = colorStudios(p.studio) + ' · ' + p.year;
   document.getElementById('detail-title').textContent = p.title;
   document.getElementById('detail-role').textContent = p.role;
   document.getElementById('detail-award').textContent = p.award || '';
@@ -755,9 +783,9 @@ document.getElementById('detail-back').addEventListener('click', ()=>{
 // ---------- Carrusel coverflow ----------
 const PROJECTS = {
   profesional: [
-    {title:"Pikkuli and the Starlight Reindeer", studio:"B-Water Studios", role:"3D Character Animator · Teaser tráiler", year:"2026",
+    {title:"Pikkuli and the Starlight Reindeer", studio:"B-Water Studios", role:"3D Character Animator", year:"2026",
      award:"Estreno en cines de Finlandia · 23 oct 2026", img:IMG.pikkuli, color:"var(--ax)", trailer:"XoIuPfkofWI",
-     desc:"Largometraje de animación de 80 minutos (Pikkuli ja Tähtipeura) basado en la serie infantil finlandesa Pikkuli. Combina fondos 2D pintados a mano con personajes 3D de aspecto peludo y tierno. Producido por AittoFlow y Filmkompaniet y dirigido por Metsämarja y Antti Aittokoski. La historia sigue a Pikkuli y sus amigos en una aventura invernal para encontrar al Reno Estelar y devolver la luz a la estrella mágica antes de Navidad. Mi trabajo: animación de personajes 3D en el teaser tráiler."},
+     desc:"Largometraje de animación de 80 minutos (Pikkuli ja Tähtipeura) basado en la serie infantil finlandesa Pikkuli. Combina fondos 2D pintados a mano con personajes 3D de aspecto peludo y tierno. Producido por AittoFlow y Filmkompaniet y dirigido por Metsämarja y Antti Aittokoski. La historia sigue a Pikkuli y sus amigos en una aventura invernal para encontrar al Reno Estelar y devolver la luz a la estrella mágica antes de Navidad. Mi trabajo: animación de personajes 3D en la película."},
     {title:"La sociedad de la nieve", studio:"MiopiaFX", role:"Artista de efectos visuales", year:"2023",
      award:"12 premios Goya · 2 nominaciones al Óscar", img:IMG.sociedad, color:"var(--ay)", trailer:"l9tP4M8URhQ",
      desc:"Película de J.A. Bayona para Netflix sobre la tragedia aérea de los Andes de 1972, adaptación del libro de Pablo Vierci. Arrasó en los Goya 2024 con doce premios, entre ellos Mejor Película, Dirección y Efectos Especiales, y fue nominada al Óscar a Mejor Película Internacional y a Mejor Maquillaje y Peluquería. Se estrenó en cines en diciembre de 2023 y en Netflix el 4 de enero de 2024."},
@@ -786,9 +814,9 @@ function initCarousel(key, data){
     if (p.img) {
       card.classList.add('has-poster');
       card.style.backgroundImage = `url("${p.img}")`;
-      card.innerHTML = `<div class="swatch"></div><span class="studio-pill mono">${p.studio}</span>`;
+      card.innerHTML = `<div class="swatch"></div><span class="studio-pill mono">${colorStudios(p.studio)}</span>`;
     } else {
-      card.innerHTML=`<div class="swatch"></div><p class="proj-kicker">${p.year}</p><h3>${p.title}</h3><p>${p.studio}</p>`;
+      card.innerHTML=`<div class="swatch"></div><p class="proj-kicker">${p.year}</p><h3>${p.title}</h3><p>${colorStudios(p.studio)}</p>`;
     }
     card.title = p.title;
     card.setAttribute('aria-label', p.title);
@@ -868,7 +896,7 @@ function initHomeBanner(){
     layers.forEach((l, idx) => l.classList.toggle('is-active', idx === i));
     dots.forEach((d, idx) => d.classList.toggle('is-active', idx === i));
     const p = slidesData[i];
-    kickerEl.textContent = p.studio + ' · ' + p.year;
+    kickerEl.innerHTML = colorStudios(p.studio) + ' · ' + p.year;
     titleEl.textContent = p.title;
     subEl.textContent = p.role || '';
   }
