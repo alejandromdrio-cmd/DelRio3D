@@ -7,6 +7,8 @@
 <meta name="description" content="Portfolio de animación de personajes 3D: largometrajes, series, premios y reel de trabajo.">
 <meta property="og:title" content="Alex Moreno — Animador de Personajes 3D">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://alexdelrio3d.com/">
+<link rel="canonical" href="https://alexdelrio3d.com/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -481,14 +483,17 @@ function colorStudios(text){
 (function(){ const cv=document.getElementById('cv-link'); if(cv && typeof CV_BASE64 !== 'undefined' && CV_BASE64){ cv.href = 'data:application/pdf;base64,' + CV_BASE64; cv.setAttribute('download','Alex_Moreno_CV_2026.pdf'); } })();
 if (reduceMotion) document.documentElement.classList.add('reduce-motion');
 
-// Cada departamento "entra" desde una dirección ligada a su eje del gizmo:
-// dx/dy = de dónde viene (1 = derecha/abajo, -1 = izquierda/arriba), axis+deg = giro de esa entrada.
+// Ahora que toda la navegación vive en una sola fila de botones abajo (de izquierda a
+// derecha), la transición ya no sigue ejes 3D ligados a las flechas del teclado: simplemente
+// desliza horizontalmente en el mismo sentido que esa fila (ir a una pestaña más a la derecha
+// entra desde la derecha, y viceversa).
+const FACE_ORDER = ['inicio', 'sobre-mi', 'proyectos', 'reel', 'contacto'];
 const ENTRY = {
-  inicio:       {dx:0,  dy:0,  axis:'Y', deg:0,   scale:.92, label:'VIEW · PERSP',            curve:null, bx:0, by:0},
-  'sobre-mi':   {dx:1,  dy:0,  axis:'Y', deg:34,  scale:.86, label:'VIEW · +X · SOBRE_MI',     curve:'ax', bx:1, by:0},
-  proyectos:    {dx:-1, dy:0,  axis:'Y', deg:-34, scale:.86, label:'VIEW · −X · PROYECTOS',    curve:'ax', bx:-1,by:0},
-  reel:         {dx:0,  dy:-1, axis:'X', deg:-30, scale:.86, label:'VIEW · +Y · REEL',         curve:'ay', bx:0, by:-1},
-  contacto:     {dx:0,  dy:1,  axis:'X', deg:30,  scale:.86, label:'VIEW · −Y · CONTACTO',     curve:'ay', bx:0, by:1}
+  inicio:       {label:'VIEW · PERSP',            curve:null},
+  'sobre-mi':   {label:'VIEW · SOBRE_MI',         curve:'ax'},
+  proyectos:    {label:'VIEW · PROYECTOS',        curve:'ax'},
+  reel:         {label:'VIEW · REEL',             curve:'ay'},
+  contacto:     {label:'VIEW · CONTACTO',         curve:'ay'}
 };
 // Cada curva de fondo es una onda de verdad (y = base + amplitud·sin(x/longitud + fase)),
 // que avanza sola sin parar, como agua fluyendo. Navegar le da un empujón temporal.
@@ -550,10 +555,9 @@ function pulseCurve(key){
   const w = WAVES[key];
   if (w) { w.boostStart = performance.now(); w.boostDur = 1800; }
 }
-function xform(dx,dy,axis,deg,scale){
-  const ox = dx * window.innerWidth * 0.4;
-  const oy = dy * window.innerHeight * 0.4;
-  return `translate(${ox}px, ${oy}px) rotate${axis}(${deg}deg) scale(${scale})`;
+function xform(dir){
+  const ox = dir * window.innerWidth * 0.4;
+  return `translateX(${ox}px) scale(.94)`;
 }
 let activeFace = 'inicio';
 // Mientras una cara con scroll propio se anima (escala/gira al entrar o salir), su barra de
@@ -575,9 +579,11 @@ function navigateTo(face){
   const cfg = ENTRY[face];
   const outEl = document.getElementById('face-'+activeFace);
   const inEl = document.getElementById('face-'+face);
+  // dir = 1 → la nueva pestaña está más a la derecha en la barra de navegación, entra desde la derecha.
+  const dir = FACE_ORDER.indexOf(face) > FACE_ORDER.indexOf(activeFace) ? 1 : -1;
 
   inEl.style.transition = 'none';
-  inEl.style.transform = xform(cfg.dx, cfg.dy, cfg.axis, cfg.deg, cfg.scale);
+  inEl.style.transform = xform(dir);
   inEl.style.opacity = '0';
   hideScrollDuringTransition(inEl);
   void inEl.offsetHeight;
@@ -588,7 +594,7 @@ function navigateTo(face){
     inEl.style.transform = 'none';
     inEl.style.opacity = '1';
     hideScrollDuringTransition(outEl);
-    outEl.style.transform = xform(-cfg.dx, -cfg.dy, cfg.axis, cfg.deg, cfg.scale);
+    outEl.style.transform = xform(-dir);
     outEl.style.opacity = '0';
     outEl.style.pointerEvents = 'none';
   });
@@ -649,15 +655,17 @@ document.querySelectorAll('[data-face]').forEach(el=>{
   }
 })();
 
-// Flechas del teclado: mismo mapeo direccional que las ramas (derecha=sobre_mi, izquierda=proyectos, arriba=reel, abajo=contacto).
-const ARROW_TO_FACE = { ArrowRight:'sobre-mi', ArrowLeft:'proyectos', ArrowUp:'reel', ArrowDown:'contacto' };
+// Flechas del teclado: recorren la barra de navegación en su propio orden (inicio → sobre_mi →
+// proyectos → reel → contacto → inicio...), con flecha derecha hacia delante e izquierda hacia atrás.
 window.addEventListener('keydown', (e)=>{
-  const target = ARROW_TO_FACE[e.key];
-  if (!target) return;
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
   const tag = document.activeElement ? document.activeElement.tagName : '';
   if (tag === 'INPUT' || tag === 'TEXTAREA') return; // no interferir al escribir, p.ej. la contraseña de la reel
   e.preventDefault();
-  navigateTo(activeFace === target ? 'inicio' : target);
+  const idx = FACE_ORDER.indexOf(activeFace);
+  const dir = e.key === 'ArrowRight' ? 1 : -1;
+  const nextIdx = (idx + dir + FACE_ORDER.length) % FACE_ORDER.length;
+  navigateTo(FACE_ORDER[nextIdx]);
 });
 
 // ---------- NDA ----------
@@ -666,7 +674,7 @@ window.addEventListener('keydown', (e)=>{
 // configuradas en el panel de Vercel. Así ni la contraseña ni el vídeo aparecen nunca en
 // el código que llega al navegador (antes, cualquiera podía verlos con "ver código fuente").
 // IMPORTANTE: por esto mismo, la comprobación solo funciona cuando la página está desplegada
-// de verdad en Vercel (del-rio3d.vercel.app o tu dominio final) — al abrir este archivo suelto
+// de verdad en Vercel (alexdelrio3d.com) — al abrir este archivo suelto
 // en tu ordenador, o en la vista previa de Claude, no hay ningún servidor detrás y el aviso
 // "esta comprobación solo funciona desplegada en vercel" es el comportamiento esperado, no un fallo.
 const reelScreen = document.getElementById('reel-screen');
