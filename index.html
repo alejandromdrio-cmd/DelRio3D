@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Alex Del Rio — Animador de Personajes 3D</title>
-<meta name="description" content="Portfolio de animación de personajes 3D: largometrajes, series, premios y reel de trabajo.">
-<meta property="og:title" content="Alex Del Rio — Animador de Personajes 3D">
+<title>Alex Del Rio — 3D Character Animator</title>
+<meta name="description" content="3D character animation portfolio: feature films, series, awards and demo reel.">
+<meta property="og:title" content="Alex Del Rio — 3D Character Animator">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://alexdelrio3d.com/">
 <link rel="canonical" href="https://alexdelrio3d.com/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%231a1b1e%22/%3E%3Ctext%20x%3D%2232%22%20y%3D%2245%22%20font-family%3D%22IBM%20Plex%20Mono%2C%20Menlo%2C%20monospace%22%20font-size%3D%2236%22%20font-weight%3D%22700%22%20fill%3D%22%235ec8f5%22%20text-anchor%3D%22middle%22%3EA%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -71,12 +72,12 @@
      posicionamos y coloreamos por JS según la sección activa, y que sí podemos desvanecer
      suavemente en vez de que aparezca de golpe. */
   .face::-webkit-scrollbar{display:none;}
-  #face-inicio{--rail:rgba(94,200,245,.4); --rail-hover:var(--sel);}
-  #face-sobre-mi{--rail:rgba(224,85,74,.4); --rail-hover:var(--nav-red);}
-  #face-proyectos{--rail:rgba(74,144,217,.4); --rail-hover:var(--az);}
+  #face-home{--rail:rgba(94,200,245,.4); --rail-hover:var(--sel);}
+  #face-about{--rail:rgba(224,85,74,.4); --rail-hover:var(--nav-red);}
+  #face-projects{--rail:rgba(74,144,217,.4); --rail-hover:var(--az);}
   #face-reel{--rail:rgba(76,195,138,.4); --rail-hover:var(--ay);}
-  #face-contacto{--rail:rgba(232,121,74,.4); --rail-hover:var(--ax);}
-  #face-inicio{opacity:1; pointer-events:auto;}
+  #face-contact{--rail:rgba(232,121,74,.4); --rail-hover:var(--ax);}
+  #face-home{opacity:1; pointer-events:auto;}
 
   /* ---- scrollbar propia: mismo look de antes (fina, minimalista, coloreada por sección) pero
      con un fundido de opacidad real al aparecer/desaparecer en vez del "golpe" nativo. ---- */
@@ -102,11 +103,11 @@
   .bottom-nav button{--c:var(--ink-dim); flex:none; border:1px solid var(--line); background:transparent;
     color:var(--c); font-family:'IBM Plex Mono',monospace; font-size:.74rem; padding:8px 15px;
     border-radius:999px; cursor:pointer; white-space:nowrap; transition:background .2s, color .2s, border-color .2s;}
-  .bottom-nav button[data-face="inicio"]{--c:var(--sel);}
-  .bottom-nav button[data-face="sobre-mi"]{--c:var(--nav-red);}
-  .bottom-nav button[data-face="proyectos"]{--c:var(--az);}
+  .bottom-nav button[data-face="home"]{--c:var(--sel);}
+  .bottom-nav button[data-face="about"]{--c:var(--nav-red);}
+  .bottom-nav button[data-face="projects"]{--c:var(--az);}
   .bottom-nav button[data-face="reel"]{--c:var(--ay);}
-  .bottom-nav button[data-face="contacto"]{--c:var(--ax);}
+  .bottom-nav button[data-face="contact"]{--c:var(--ax);}
   .bottom-nav button:hover{border-color:var(--c);}
   .bottom-nav button.is-active{background:var(--c); border-color:var(--c); color:#12131a; font-weight:600;}
   @media(max-width:480px){.bottom-nav{gap:4px; padding:5px; top:calc(env(safe-area-inset-top,0px) + 52px);} .bottom-nav button{padding:6px 10px; font-size:.66rem;}}
@@ -116,7 +117,7 @@
      pegada arriba con hueco vacío debajo) — "margin:auto 0" en vez de justify-content:center para
      que, si algún día el contenido no cabe en pantallas pequeñas, se comporte como el flujo normal
      (arriba, con scroll) en lugar de recortarse por arriba. ---- */
-  #face-inicio .wrap{min-height:100%; display:flex; flex-direction:column;}
+  #face-home .wrap{min-height:100%; display:flex; flex-direction:column;}
   .hero-inner{width:100%; margin:auto 0;}
 
   /* ---- hero: texto a la izquierda, cartelera de proyectos a la derecha (más ancha y centrada
@@ -414,11 +415,11 @@
 </div>
 
 <nav class="bottom-nav" id="bottom-nav">
-  <button data-face="inicio" type="button">inicio</button>
-  <button data-face="sobre-mi" type="button">sobre_mi</button>
-  <button data-face="proyectos" type="button">proyectos</button>
+  <button data-face="home" type="button">home</button>
+  <button data-face="about" type="button">about</button>
+  <button data-face="projects" type="button">projects</button>
   <button data-face="reel" type="button">reel</button>
-  <button data-face="contacto" type="button">contacto</button>
+  <button data-face="contact" type="button">contact</button>
 </nav>
 
 <div id="scroll-thumb" class="scroll-thumb" aria-hidden="true"></div>
@@ -427,7 +428,7 @@
      activa del carrusel de proceso, sea cual sea el proyecto abierto en ese momento. -->
 <div class="process-lightbox" id="process-lightbox" hidden>
   <div class="process-lightbox-inner">
-    <button class="btn ghost process-lightbox-close" id="process-lightbox-close" type="button">‹ Volver</button>
+    <button class="btn ghost process-lightbox-close" id="process-lightbox-close" type="button">‹ Back</button>
     <img class="process-lightbox-img" id="process-lightbox-img" src="" alt="">
   </div>
 </div>
@@ -435,25 +436,25 @@
 <div class="scene">
   <div class="cube" id="cube">
 
-    <div class="face is-active" id="face-inicio">
+    <div class="face is-active" id="face-home">
       <div class="wrap">
         <div class="hero-inner">
           <div class="hero-grid">
             <div class="hero-text">
-              <button class="hero-avatar-frame" id="hero-avatar-frame" type="button" title="Contacto" data-face="contacto">
+              <button class="hero-avatar-frame" id="hero-avatar-frame" type="button" title="Contact" data-face="contact">
                 <img class="hero-avatar" id="hero-avatar" src="" alt="Alex Del Rio">
               </button>
               <h1 class="hero-name"><span class="accent">ALEX</span><span class="hero-surname">DEL RIO</span></h1>
-              <p class="kicker mono">ANIMADOR DE PERSONAJES 3D · LARGOMETRAJES Y SERIES</p>
-              <p class="tag">Este es un pequeño vistazo a mi trabajo, mi experiencia y algunos de los proyectos en los que he tenido la oportunidad de participar.</p>
-              <p class="status mono"><span class="status-dot"></span>Disponible para nuevos proyectos</p>
+              <p class="kicker mono">3D CHARACTER ANIMATOR · FEATURE FILMS AND SERIES</p>
+              <p class="tag">This is a small glimpse of my work, my experience and some of the projects I've had the opportunity to be part of.</p>
+              <p class="status mono"><span class="status-dot"></span>Available for new projects</p>
             </div>
 
             <!-- Banner de proyectos en formato cartelera (mismo 2:3 que los pósters de "proyectos"),
                  se rellena solo desde PROJECTS.profesional (ver script más abajo). Añadir un
                  proyecto nuevo ahí lo añade aquí también, sin tocar este bloque. -->
             <div class="home-banner" id="home-banner">
-              <p class="home-banner-hint mono">// proyectos recientes</p>
+              <p class="home-banner-hint mono">// recent projects</p>
               <p class="home-banner-count mono" id="home-banner-count"></p>
               <div class="home-banner-track" id="home-banner-track"></div>
               <div class="home-banner-dots" id="home-banner-dots"></div>
@@ -462,62 +463,62 @@
                 <h3 id="home-banner-title"></h3>
                 <p id="home-banner-sub"></p>
               </div>
-              <p class="home-banner-cta mono">ver proyecto →</p>
+              <p class="home-banner-cta mono">view project →</p>
             </div>
           </div>
 
           <div class="cta-row cta-row-hero">
-            <a class="btn ghost" href="#" id="cv-link">Descargar CV</a>
-            <button class="btn solid" data-face="reel" type="button">Ver reel</button>
-            <button class="btn ghost" data-face="contacto" type="button">Contactar</button>
+            <a class="btn ghost" href="#" id="cv-link">Download CV</a>
+            <button class="btn solid" data-face="reel" type="button">View reel</button>
+            <button class="btn ghost" data-face="contact" type="button">Contact</button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="face" id="face-sobre-mi">
+    <div class="face" id="face-about">
       <div class="wrap">
-        <div class="sec-head"><span class="tag01 mono">+X</span><h2>sobre_mí</h2></div>
+        <div class="sec-head"><span class="tag01 mono">+X</span><h2>about</h2></div>
         <div class="about-top">
           <div class="photo-frame glass">
-            <img id="profile-photo" src="" alt="Foto de Alex Del Rio" style="display:none; object-position:55% 30%;">
-            <div class="ph-placeholder">📷<br>Tu foto aquí<br>(retrato, formato 4:5)</div>
+            <img id="profile-photo" src="" alt="Photo of Alex Del Rio" style="display:none; object-position:55% 30%;">
+            <div class="ph-placeholder">📷<br>Your photo here<br>(portrait, 4:5 format)</div>
           </div>
           <div class="bio">
-            <p>Animador 3D de personajes. En 2026 trabajé en <span style="color:var(--az)">B-Water Studios</span> como 3D Character Animator en «Pikkuli and the Starlight Reindeer», un largometraje que combina fondos 2D pintados a mano con personajes 3D.</p>
-            <p>Anteriormente trabajé en <span style="color:var(--ay)">MiopiaFX</span> y <span style="color:var(--ax)">USER T38</span> como compositor de efectos visuales.</p>
+            <p>3D character animator. In 2026 I worked at <span style="color:var(--az)">B-Water Studios</span> as a 3D Character Animator on «Pikkuli and the Starlight Reindeer», a feature film combining hand-painted 2D backgrounds with 3D characters.</p>
+            <p>Previously I worked at <span style="color:var(--ay)">MiopiaFX</span> and <span style="color:var(--ax)">USER T38</span> as a VFX compositor.</p>
           </div>
         </div>
         <div class="channel glass">
           <div class="chan-row"><span class="k">software</span><span class="v">Maya, Blender</span></div>
-          <div class="chan-row"><span class="k">especialidad</span><span class="v">Body mechanics · Animación cartoon</span></div>
-          <div class="chan-row"><span class="k">experiencia</span><span class="v"><span style="color:var(--az)">B-Water Studios</span> · <span style="color:var(--ay)">MiopiaFX</span> · <span style="color:var(--ax)">USER T38</span></span></div>
-          <div class="chan-row"><span class="k">idiomas</span><span class="v">Español, inglés</span></div>
-          <div class="chan-row"><span class="k">ubicación</span><span class="v">Tenerife · Madrid · Guadalajara — open to relocate</span></div>
+          <div class="chan-row"><span class="k">specialty</span><span class="v">Body mechanics · Cartoon animation</span></div>
+          <div class="chan-row"><span class="k">experience</span><span class="v"><span style="color:var(--az)">B-Water Studios</span> · <span style="color:var(--ay)">MiopiaFX</span> · <span style="color:var(--ax)">USER T38</span></span></div>
+          <div class="chan-row"><span class="k">languages</span><span class="v">Spanish, English</span></div>
+          <div class="chan-row"><span class="k">location</span><span class="v">Tenerife · Madrid · Guadalajara — open to relocate</span></div>
         </div>
-        <p class="exp-title mono">// experiencia</p>
+        <p class="exp-title mono">// experience</p>
         <div class="exp-list glass">
           <div class="exp-row">
-            <div class="exp-when mono">feb 2026 – jul 2026<br><span>6 meses</span></div>
+            <div class="exp-when mono">feb 2026 – jul 2026<br><span>6 months</span></div>
             <div class="exp-main">
-              <h3>Animador 3D</h3>
-              <p class="exp-co"><span style="color:var(--az)">B-Water Studios</span> · Jornada completa · Presencial</p>
+              <h3>3D Animator</h3>
+              <p class="exp-co"><span style="color:var(--az)">B-Water Studios</span> · Full-time · On-site</p>
               <p class="exp-note">Pikkuli and the Starlight Reindeer (2026) · 3D Character Animator</p>
             </div>
           </div>
           <div class="exp-row">
-            <div class="exp-when mono">oct 2022 – ago 2023<br><span>11 meses</span></div>
+            <div class="exp-when mono">oct 2022 – aug 2023<br><span>11 months</span></div>
             <div class="exp-main">
-              <h3>Artista de efectos visuales</h3>
-              <p class="exp-co"><span style="color:var(--ay)">MiopiaFX</span> · Jornada completa · Madrid, España</p>
+              <h3>VFX Artist</h3>
+              <p class="exp-co"><span style="color:var(--ay)">MiopiaFX</span> · Full-time · Madrid, Spain</p>
               <p class="exp-note">La sociedad de la nieve · Reina Roja · Cóyotl</p>
             </div>
           </div>
           <div class="exp-row">
-            <div class="exp-when mono">feb 2020 – jun 2020<br><span>5 meses</span></div>
+            <div class="exp-when mono">feb 2020 – jun 2020<br><span>5 months</span></div>
             <div class="exp-main">
-              <h3>Artista de efectos visuales</h3>
-              <p class="exp-co"><span style="color:var(--ax)">USER T38</span> · Contrato de prácticas · Madrid, España</p>
+              <h3>VFX Artist (Intern)</h3>
+              <p class="exp-co"><span style="color:var(--ax)">USER T38</span> · Internship · Madrid, Spain</p>
               <p class="exp-note">Wayback · Way Down · The Head</p>
             </div>
           </div>
@@ -525,12 +526,12 @@
       </div>
     </div>
 
-    <div class="face" id="face-proyectos">
+    <div class="face" id="face-projects">
       <div class="wrap wrap-reel">
-        <div class="sec-head proj-sec-head"><span class="tag01 mono">−X</span><h2>proyectos</h2></div>
-        <p class="tag proj-intro">Animación de personajes 3D, otros créditos profesionales en VFX y ejercicios personales.</p>
+        <div class="sec-head proj-sec-head"><span class="tag01 mono">−X</span><h2>projects</h2></div>
+        <p class="tag proj-intro">3D character animation, other professional VFX credits, and personal exercises.</p>
         <div class="proj-panel" id="panel-profesional">
-          <p class="proj-label mono">// animación profesional <span class="proj-count" id="count-profesional"></span></p>
+          <p class="proj-label mono">// professional animation <span class="proj-count" id="count-profesional"></span></p>
           <div class="carousel-wrap">
             <button class="car-nav" id="prev-profesional" type="button">‹</button>
             <div class="stage2" id="stage-profesional"><div class="ring" id="ring-profesional"></div></div>
@@ -542,7 +543,7 @@
           </div>
         </div>
         <div class="proj-panel" id="panel-personal">
-          <p class="proj-label mono">// animación personal <span class="proj-count" id="count-personal"></span></p>
+          <p class="proj-label mono">// personal animation <span class="proj-count" id="count-personal"></span></p>
           <div class="carousel-wrap">
             <button class="car-nav" id="prev-personal" type="button">‹</button>
             <div class="stage2" id="stage-personal"><div class="ring" id="ring-personal"></div></div>
@@ -560,7 +561,7 @@
              componente de carrusel que el resto, así que añadir/quitar proyectos aquí no toca nada
              más. -->
         <div class="proj-panel" id="panel-otros">
-          <p class="proj-label mono">// proyectos de vfx <span class="proj-count" id="count-otros"></span></p>
+          <p class="proj-label mono">// vfx projects <span class="proj-count" id="count-otros"></span></p>
           <div class="carousel-wrap">
             <button class="car-nav" id="prev-otros" type="button">‹</button>
             <div class="stage2" id="stage-otros"><div class="ring" id="ring-otros"></div></div>
@@ -573,9 +574,9 @@
         </div>
 
         <div class="proj-detail" id="proj-detail" hidden>
-          <button class="btn ghost detail-back" id="detail-back" type="button">‹ Volver a proyectos</button>
+          <button class="btn ghost detail-back" id="detail-back" type="button">‹ Back to projects</button>
           <div class="detail-trailer" id="detail-trailer" hidden>
-            <p class="proj-label mono" id="detail-trailer-label">// tráiler</p>
+            <p class="proj-label mono" id="detail-trailer-label">// trailer</p>
             <div class="detail-trailer-screen" id="detail-trailer-screen"></div>
           </div>
           <div class="detail-panel detail-grid glass" id="detail-panel">
@@ -592,7 +593,7 @@
                rellenar su array "process" en PROJECTS.personal con las imágenes). Si el proyecto
                no tiene fotos de proceso, este bloque se queda oculto sin más. -->
           <div class="detail-process" id="detail-process" hidden>
-            <p class="proj-label mono">// proceso</p>
+            <p class="proj-label mono">// process</p>
             <div class="detail-process-row">
               <button class="car-nav" id="process-prev" type="button">‹</button>
               <div class="detail-process-stage" id="detail-process-stage"></div>
@@ -607,64 +608,64 @@
     <div class="face" id="face-reel">
       <div class="wrap wrap-reel">
         <div class="sec-head"><span class="tag01 mono">+Y</span><h2>Animation Demo Reel</h2></div>
-        <p class="tag" style="margin:-16px 0 28px; max-width:none;">Selección de animación de personajes en largometrajes, series y ejercicios personales.</p>
+        <p class="tag" style="margin:-16px 0 28px; max-width:none;">A selection of character animation in feature films, series, and personal exercises.</p>
         <div class="reel-layout">
         <div class="reel-stage">
           <div class="reel-screen locked" id="reel-screen">
             <div class="lock-ui">
-              <p class="lock-copy">Demo Reel de animación disponible bajo contraseña proporcionada para reclutadores y estudios.</p>
+              <p class="lock-copy">Animation demo reel available under a password provided to recruiters and studios.</p>
               <div class="pw-field">
-                <input type="password" placeholder="contraseña" class="pw-input" id="reel-pw">
-                <button class="pw-toggle mono" type="button" id="reel-pw-toggle" aria-label="Mostrar contraseña">ver</button>
+                <input type="password" placeholder="password" class="pw-input" id="reel-pw">
+                <button class="pw-toggle mono" type="button" id="reel-pw-toggle" aria-label="Show password">show</button>
               </div>
-              <button class="pw-btn" type="button" id="reel-btn">Enviar</button>
+              <button class="pw-btn" type="button" id="reel-btn">Submit</button>
               <p class="lock-msg" id="reel-msg"></p>
             </div>
           </div>
           <div class="reel-info" id="reel-info" hidden>
             <div class="reel-cta">
-              <p class="proj-label mono">// ¿hablamos?</p>
+              <p class="proj-label mono">// let's talk</p>
               <div class="contact-methods">
                 <a class="contact-method glass cm-orange" href="mailto:alejandro.mdrio@gmail.com">
-                  <span class="cm-label">contáctame por correo</span>
+                  <span class="cm-label">contact me by email</span>
                   <span class="cm-value">alejandro.mdrio@gmail.com</span>
                 </a>
                 <a class="contact-method glass cm-blue" href="https://www.linkedin.com/in/alexmoreno3d" target="_blank" rel="noopener">
-                  <span class="cm-label">contáctame por linkedin</span>
+                  <span class="cm-label">contact me on linkedin</span>
                   <span class="cm-value">linkedin.com/in/alexmoreno3d</span>
                 </a>
               </div>
             </div>
-            <p class="reel-fallback mono">Si no ves el vídeo aquí (bloqueo del entorno de vista previa): <a href="#" id="reel-fallback-link" target="_blank" rel="noopener">ábrelo en YouTube</a></p>
+            <p class="reel-fallback mono">If you can't see the video here (preview environment restriction): <a href="#" id="reel-fallback-link" target="_blank" rel="noopener">open it on YouTube</a></p>
           </div>
         </div>
         <div class="reel-side">
-          <p class="proj-label mono">// qué vas a encontrar</p>
+          <p class="proj-label mono">// what you'll find</p>
           <ul class="reel-highlights">
-            <li>Animación de personajes en largometrajes</li>
-            <li>Proyectos personales</li>
-            <li>Animaciones hechas en Blender y Maya</li>
+            <li>Character animation in feature films</li>
+            <li>Personal projects</li>
+            <li>Animations made in Blender and Maya</li>
           </ul>
         </div>
         </div>
       </div>
     </div>
 
-    <div class="face" id="face-contacto">
+    <div class="face" id="face-contact">
       <div class="wrap">
-        <div class="sec-head"><span class="tag01 mono">−Y</span><h2>contacto</h2></div>
-        <p class="tag" style="margin:-16px 0 28px;">¿Buscas animador de personajes para tu próximo proyecto? Escríbeme por cualquiera de estas vías.</p>
+        <div class="sec-head"><span class="tag01 mono">−Y</span><h2>contact</h2></div>
+        <p class="tag" style="margin:-16px 0 28px;">Looking for a character animator for your next project? Reach out through any of these channels.</p>
         <div class="contact-methods">
           <a class="contact-method glass cm-orange" href="mailto:alejandro.mdrio@gmail.com">
-            <span class="cm-label">contáctame por correo</span>
+            <span class="cm-label">contact me by email</span>
             <span class="cm-value">alejandro.mdrio@gmail.com</span>
           </a>
           <a class="contact-method glass cm-blue" href="https://www.linkedin.com/in/alexmoreno3d" target="_blank" rel="noopener">
-            <span class="cm-label">contáctame por linkedin</span>
+            <span class="cm-label">contact me on linkedin</span>
             <span class="cm-value">linkedin.com/in/alexmoreno3d</span>
           </a>
           <a class="contact-method glass cm-red" href="https://www.youtube.com/@AlexDelRio3D" target="_blank" rel="noopener">
-            <span class="cm-label">mi trabajo en youtube</span>
+            <span class="cm-label">my work on youtube</span>
             <span class="cm-value">youtube.com/@AlexDelRio3D</span>
           </a>
         </div>
@@ -729,13 +730,13 @@ if (reduceMotion) document.documentElement.classList.add('reduce-motion');
 // derecha), la transición ya no sigue ejes 3D ligados a las flechas del teclado: simplemente
 // desliza horizontalmente en el mismo sentido que esa fila (ir a una pestaña más a la derecha
 // entra desde la derecha, y viceversa).
-const FACE_ORDER = ['inicio', 'sobre-mi', 'proyectos', 'reel', 'contacto'];
+const FACE_ORDER = ['home', 'about', 'projects', 'reel', 'contact'];
 const ENTRY = {
-  inicio:       {label:'VIEW · PERSP',            curve:null},
-  'sobre-mi':   {label:'VIEW · SOBRE_MI',         curve:'ax'},
-  proyectos:    {label:'VIEW · PROYECTOS',        curve:'ax'},
+  home:         {label:'VIEW · PERSP',            curve:null},
+  about:        {label:'VIEW · ABOUT',            curve:'ax'},
+  projects:     {label:'VIEW · PROJECTS',         curve:'ax'},
   reel:         {label:'VIEW · REEL',             curve:'ay'},
-  contacto:     {label:'VIEW · CONTACTO',         curve:'ay'}
+  contact:      {label:'VIEW · CONTACT',          curve:'ay'}
 };
 // Cada curva de fondo es una onda de verdad (y = base + amplitud·sin(x/longitud + fase)),
 // que avanza sola sin parar, como agua fluyendo. Navegar le da un empujón temporal.
@@ -806,7 +807,7 @@ function xform(dir){
   const ox = dir * window.innerWidth * 0.4;
   return `translateX(${ox}px) scale(.94)`;
 }
-let activeFace = 'inicio';
+let activeFace = 'home';
 // Registro de los carruseles de "proyectos" para poder pausar/reanudar su giro automático según
 // si esa página está a la vista o no. Declarado aquí, muy pronto, a propósito: si la página se
 // abre con un enlace directo a "#proyectos" (p.ej. al refrescar con F5 estando ahí), el bloque de
@@ -886,14 +887,14 @@ window.addEventListener('resize', ()=>{
   const el = document.getElementById('face-'+activeFace);
   if (el) updateScrollThumb(el);
 });
-setTimeout(()=> onFaceChanged(document.getElementById('face-inicio')), 1800);
+setTimeout(()=> onFaceChanged(document.getElementById('face-home')), 1800);
 
 function navigateTo(face){
   if (face === activeFace || !ENTRY[face]) return;
   // Si vamos a "proyectos" desde otra pestaña, siempre aterrizamos en el carrusel principal:
   // aunque nos hubiéramos dejado abierto el detalle de un proyecto antes de irnos, no queremos
   // volver justo ahí, sino al listado.
-  if (face === 'proyectos' && typeof closeProjectDetail === 'function' && projDetail && !projDetail.hidden) {
+  if (face === 'projects' && typeof closeProjectDetail === 'function' && projDetail && !projDetail.hidden) {
     closeProjectDetail();
   }
   const cfg = ENTRY[face];
@@ -927,17 +928,17 @@ function navigateTo(face){
   onFaceChanged(inEl);
   // Los carruseles de "proyectos" solo deben girar solos mientras esa página está a la vista —
   // si no, seguían avanzando de fondo aunque estuviéramos en otra pestaña sin verlos.
-  if (face === 'proyectos') resumeAllCarousels(); else pauseAllCarousels();
+  if (face === 'projects') resumeAllCarousels(); else pauseAllCarousels();
 }
 
 // ---------- Enlace directo a un departamento (deep link) ----------
-// Cada vez que cambiamos de cara, reflejamos el destino en la URL (/reel, /sobre-mi, ...)
+// Cada vez que cambiamos de cara, reflejamos el destino en la URL (/reel, /about, ...)
 // para que ese enlace siempre lleve directo ahí, sin pasar por la portada.
 // Así, p.ej., "tu-portfolio.com/#reel" es un enlace ESTABLE al reel: si cambias el vídeo
 // o la contraseña dentro del código más adelante, el enlace que compartes no cambia nunca.
 function setHashForFace(face){
   if (!history.replaceState) return;
-  const hash = face === 'inicio' ? '' : ('#' + face);
+  const hash = face === 'home' ? '' : ('#' + face);
   // En algunos entornos con restricciones (p.ej. la vista previa de artefactos, dentro de un
   // iframe "about:srcdoc") el navegador no permite tocar la URL y lanza un SecurityError; en la
   // web real desplegada esto nunca pasa. Lo envolvemos para que, si ocurre, simplemente no
@@ -965,7 +966,7 @@ function jumpToFaceInstant(face){
   document.querySelectorAll('[data-face]').forEach(el=> el.classList.toggle('is-active', el.dataset.face === face));
   activeFace = face;
   onFaceChanged(inEl);
-  if (face === 'proyectos') resumeAllCarousels(); else pauseAllCarousels();
+  if (face === 'projects') resumeAllCarousels(); else pauseAllCarousels();
 }
 window.addEventListener('resize', ()=>{});
 // Marca el botón de nav correspondiente a la cara inicial (inicio) como activo desde el primer
@@ -977,7 +978,7 @@ document.querySelectorAll('[data-face]').forEach(el=>{
     // Si ya estamos en "proyectos" pero dentro del detalle de un proyecto, volver a pulsar
     // "proyectos" en el nav debe llevarnos de vuelta al listado, no quedarse sin hacer nada.
     if (face === activeFace) {
-      if (face === 'proyectos' && projDetail && !projDetail.hidden) closeProjectDetail();
+      if (face === 'projects' && projDetail && !projDetail.hidden) closeProjectDetail();
       return;
     }
     navigateTo(face);
@@ -994,7 +995,7 @@ document.querySelectorAll('[data-face]').forEach(el=>{
   const fromHash = (location.hash || '').replace('#','');
   const fromPath = location.pathname.replace(/^\/|\/$/g, ''); // quita barras al inicio/fin
   const target = ENTRY[fromHash] ? fromHash : (ENTRY[fromPath] ? fromPath : null);
-  if (target && target !== 'inicio') {
+  if (target && target !== 'home') {
     jumpToFaceInstant(target);
   }
 })();
@@ -1033,7 +1034,7 @@ reelPwToggle.addEventListener('click', () => {
   const showing = reelPw.type === 'text';
   reelPw.type = showing ? 'password' : 'text';
   reelPwToggle.textContent = showing ? 'ver' : 'ocultar';
-  reelPwToggle.setAttribute('aria-label', showing ? 'Mostrar contraseña' : 'Ocultar contraseña');
+  reelPwToggle.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
   reelPw.focus();
 });
 
@@ -1084,15 +1085,15 @@ async function checkReelPassword(){
       reelMsg.textContent = '';
       unlockReel(data.videoId);
     } else if (res.status === 401) {
-      reelMsg.textContent = 'contraseña incorrecta';
+      reelMsg.textContent = 'incorrect password';
     } else if (data && data.error === 'server_not_configured') {
       reelMsg.textContent = 'faltan REEL_PASSWORD / REEL_VIDEO_ID en las variables de entorno de vercel';
     } else {
       // 404/501/etc.: no existe esta función en el entorno actual (normal fuera de vercel).
-      reelMsg.textContent = 'esta comprobación solo funciona desplegada en vercel';
+      reelMsg.textContent = 'this check only works when deployed on vercel';
     }
   } catch (err) {
-    reelMsg.textContent = 'no se pudo comprobar la contraseña (revisa tu conexión)';
+    reelMsg.textContent = 'could not verify the password (check your connection)';
   } finally {
     reelBtn.disabled = false;
   }
@@ -1116,7 +1117,7 @@ function openModal(p){
   const dTrailerScreen = document.getElementById('detail-trailer-screen');
   const dTrailerLabel = document.getElementById('detail-trailer-label');
   if (p.trailer) {
-    dTrailerLabel.textContent = '// ' + (p.videoLabel || 'tráiler');
+    dTrailerLabel.textContent = '// ' + (p.videoLabel || 'trailer');
     dTrailerScreen.innerHTML = `<iframe src="https://www.youtube.com/embed/${p.trailer}" title="${p.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
     dTrailer.hidden = false;
   } else {
@@ -1220,48 +1221,48 @@ document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape' && !processLi
 const PROJECTS = {
   profesional: [
     {title:"Pikkuli and the Starlight Reindeer", studio:"B-Water Studios", role:"3D Character Animator", year:"2026",
-     award:"Estreno en cines de Finlandia · 23 oct 2026", img:IMG.pikkuli, color:"var(--ax)", trailer:"XoIuPfkofWI",
-     desc:"Largometraje de animación de 80 minutos (Pikkuli ja Tähtipeura) basado en la serie infantil finlandesa Pikkuli. Combina fondos 2D pintados a mano con personajes 3D de aspecto peludo y tierno. Producido por AittoFlow y Filmkompaniet y dirigido por Metsämarja y Antti Aittokoski. La historia sigue a Pikkuli y sus amigos en una aventura invernal para encontrar al Reno Estelar y devolver la luz a la estrella mágica antes de Navidad. Mi trabajo: animación de personajes 3D en la película."}
+     award:"Finland theatrical release · Oct 23, 2026", img:IMG.pikkuli, color:"var(--ax)", trailer:"XoIuPfkofWI",
+     desc:"An 80-minute animated feature film (Pikkuli ja Tähtipeura) based on the Finnish children's series Pikkuli. It combines hand-painted 2D backgrounds with fuzzy, endearing 3D characters. Produced by AittoFlow and Filmkompaniet and directed by Metsämarja and Antti Aittokoski. The story follows Pikkuli and his friends on a winter adventure to find the Starlight Reindeer and restore light to the magic star before Christmas. My work: 3D character animation on the full film."}
   ],
   // Créditos profesionales como artista de VFX (no de animación de personajes): se muestran
   // aparte para no mezclarlos con el trabajo de animación de arriba, pero siguen aquí porque
   // son proyectos de peso real (Goya, nominación al Óscar, Netflix, Amazon, Max).
   otros: [
-    {title:"La sociedad de la nieve", studio:"MiopiaFX", role:"Artista de efectos visuales", year:"2023",
-     award:"12 premios Goya · 2 nominaciones al Óscar", img:IMG.sociedad, color:"var(--ay)", trailer:"l9tP4M8URhQ",
-     desc:"Película de J.A. Bayona para Netflix sobre la tragedia aérea de los Andes de 1972, adaptación del libro de Pablo Vierci. Arrasó en los Goya 2024 con doce premios, entre ellos Mejor Película, Dirección y Efectos Especiales, y fue nominada al Óscar a Mejor Película Internacional y a Mejor Maquillaje y Peluquería. Se estrenó en cines en diciembre de 2023 y en Netflix el 4 de enero de 2024."},
-    {title:"Reina Roja", studio:"MiopiaFX", role:"Artista de efectos visuales", year:"2024",
-     award:"Estreno en Prime Video · 29 feb 2024", img:IMG.reina, color:"var(--az)", trailer:"bH1g07mBHGw",
-     desc:"Serie de thriller de Prime Video dirigida por Koldo Serra, adaptación de la novela de Juan Gómez-Jurado, con Vicky Luengo y Hovik Keuchkerian. Antonia Scott, la persona más inteligente del mundo, se une a la policía para resolver un caso de secuestro en Madrid. Siete episodios."},
-    {title:"Cóyotl: Héroe y Bestia", studio:"MiopiaFX", role:"Artista de efectos visuales", year:"2025",
-     award:"Estreno en Max · 27 feb 2025", img:IMG.coyotl, color:"var(--sel)", trailer:"lyLjkGjZpbg",
-     desc:"Serie de acción y fantasía de Max protagonizada por Alejandro Speitzer. En el norte de México, Lupe se transforma en el Cóyotl, mitad hombre y mitad bestia, para proteger a su pueblo de la violencia de dos cárteles rivales. Mezcla mitología prehispánica y thriller contemporáneo. Ocho episodios."},
-    {title:"Wayback", studio:"USER T38", role:"Compositor 2D en prácticas", year:"", award:"",
-     img:IMG.wayback, color:"var(--ax)", trailer:"i9gtf4InVyE", videoLabel:"cortometraje",
-     desc:"Cortometraje de animación dirigido por Carlos Salgado, en el que participé durante mis prácticas en USER T38 realizando composición 2D."},
-    {title:"Way Down", studio:"USER T38", role:"Artista de efectos visuales en prácticas", year:"", award:"",
-     img:IMG.waydown, color:"var(--ay)", trailer:"MBkwxn1ogTI", videoLabel:"tráiler",
-     desc:"Película de atraco dirigida por Jaume Balagueró. Participamos en los títulos de crédito iniciales durante mi etapa en USER T38."},
-    {title:"The Head", studio:"USER T38", role:"Artista de efectos visuales en prácticas", year:"", award:"",
+    {title:"La sociedad de la nieve", studio:"MiopiaFX", role:"VFX Artist", year:"2023",
+     award:"12 Goya Awards · 2 Oscar nominations", img:IMG.sociedad, color:"var(--ay)", trailer:"l9tP4M8URhQ",
+     desc:"A J.A. Bayona film for Netflix about the 1972 Andes plane crash tragedy, adapted from Pablo Vierci's book. It swept the 2024 Goya Awards with twelve wins, including Best Film, Best Director and Best Visual Effects, and was nominated for the Oscar for Best International Feature Film and Best Makeup and Hairstyling. It premiered in theaters in December 2023 and on Netflix on January 4, 2024."},
+    {title:"Reina Roja", studio:"MiopiaFX", role:"VFX Artist", year:"2024",
+     award:"Prime Video premiere · Feb 29, 2024", img:IMG.reina, color:"var(--az)", trailer:"bH1g07mBHGw",
+     desc:"A Prime Video thriller series directed by Koldo Serra, adapted from Juan Gómez-Jurado's novel, starring Vicky Luengo and Hovik Keuchkerian. Antonia Scott, the smartest person in the world, joins the police to solve a kidnapping case in Madrid. Seven episodes."},
+    {title:"Cóyotl: Héroe y Bestia", studio:"MiopiaFX", role:"VFX Artist", year:"2025",
+     award:"Max premiere · Feb 27, 2025", img:IMG.coyotl, color:"var(--sel)", trailer:"lyLjkGjZpbg",
+     desc:"A Max action-fantasy series starring Alejandro Speitzer. In northern Mexico, Lupe transforms into the Cóyotl, half man and half beast, to protect his town from the violence of two rival cartels. It blends pre-Hispanic mythology with a contemporary thriller. Eight episodes."},
+    {title:"Wayback", studio:"USER T38", role:"2D Compositor (Intern)", year:"", award:"",
+     img:IMG.wayback, color:"var(--ax)", trailer:"i9gtf4InVyE", videoLabel:"short film",
+     desc:"An animated short film directed by Carlos Salgado, on which I worked during my internship at USER T38 doing 2D compositing."},
+    {title:"Way Down", studio:"USER T38", role:"VFX Artist (Intern)", year:"", award:"",
+     img:IMG.waydown, color:"var(--ay)", trailer:"MBkwxn1ogTI", videoLabel:"trailer",
+     desc:"A heist film directed by Jaume Balagueró. We worked on the opening title sequence during my time at USER T38."},
+    {title:"The Head", studio:"USER T38", role:"VFX Artist (Intern)", year:"", award:"",
      img:IMG.thehead, color:"var(--az)", trailer:"JGuoZcfR7_8", videoLabel:"intro",
-     desc:"Serie de misterio ambientada en una base antártica. Participamos en la intro de la serie durante mi etapa en USER T38."}
+     desc:"A mystery series set in an Antarctic base. We worked on the show's intro during my time at USER T38."}
   ],
   personal: [
-    {title:"A football animation", studio:"Proyecto personal", role:"Animador", year:"", award:"",
-     desc:"Ejercicio personal para practicar body mechanics, en el que también trabajé la simulación de telas en Marvelous Designer.",
-     img:IMG.futbol, color:"var(--az)", trailer:"k-xXu7khWlE", videoLabel:"vídeo",
+    {title:"A football animation", studio:"Personal project", role:"Animator", year:"", award:"",
+     desc:"A personal exercise to practice body mechanics, in which I also worked on cloth simulation in Marvelous Designer.",
+     img:IMG.futbol, color:"var(--az)", trailer:"k-xXu7khWlE", videoLabel:"video",
      process:[IMG.fb_sketch, IMG.fb_process, IMG.fb_ref, IMG.fb_cloth, IMG.fb_final]},
-    {title:"A ballet animation", studio:"Proyecto personal", role:"Animador", year:"", award:"",
-     desc:"Ejercicio personal en el que buscaba combinar la fluidez y la delicadeza del movimiento de una bailarina con la fuerza y la seguridad con la que ejecuta cada paso.",
-     img:IMG.ballet, color:"var(--ay)", trailer:"jv_HpemreJ8", videoLabel:"vídeo",
+    {title:"A ballet animation", studio:"Personal project", role:"Animator", year:"", award:"",
+     desc:"A personal exercise in which I aimed to combine the fluidity and delicacy of a ballerina's movement with the strength and confidence of every step she takes.",
+     img:IMG.ballet, color:"var(--ay)", trailer:"jv_HpemreJ8", videoLabel:"video",
      process:[IMG.bal_ref, IMG.bal_clay, IMG.bal_final1, IMG.bal_final2]},
-    {title:"Don Quixote !!", studio:"Proyecto personal", role:"Animador", year:"", award:"",
-     desc:"Primera animación cartoon que hice, practicando recursos como los smears y los múltiples para trasladar ese toque cartoon al 3D.",
-     img:IMG.quixote, color:"var(--ax)", trailer:"7YBfltU3iYk", videoLabel:"vídeo",
+    {title:"Don Quixote !!", studio:"Personal project", role:"Animator", year:"", award:"",
+     desc:"The first cartoon animation I made, practicing techniques like smears and multiples to bring that cartoon touch into 3D.",
+     img:IMG.quixote, color:"var(--ax)", trailer:"7YBfltU3iYk", videoLabel:"video",
      process:[IMG.q_sketch, IMG.q_ref, IMG.q_props, IMG.q_final]},
-    {title:"A Lovely Night", studio:"Proyecto personal", role:"Animador", year:"", award:"",
-     desc:"Ejercicio de acting con dos personajes que realicé en el máster de animación, para el que cogí el audio de una de mis películas favoritas, La La Land. ¡Me lo pasé genial grabando las referencias y actuando! No sé cuántas veces escuché la canción en bucle...",
-     img:IMG.lovely, color:"var(--sel)", trailer:"baxx7gXGuYQ", videoLabel:"vídeo",
+    {title:"A Lovely Night", studio:"Personal project", role:"Animator", year:"", award:"",
+     desc:"A two-character acting exercise I made during my animation master's degree, for which I used the audio from one of my favorite films, La La Land. I had a blast filming the reference footage and acting it out myself! I lost count of how many times I listened to that song on loop...",
+     img:IMG.lovely, color:"var(--sel)", trailer:"baxx7gXGuYQ", videoLabel:"video",
      process:[IMG.ln_sketch, IMG.ln_ref1, IMG.ln_ref2, IMG.ln_analysis, IMG.ln_color]}
   ]
 };
@@ -1295,7 +1296,7 @@ function initCarousel(key, data, initialDelay, initialTitle){
   let current = initialIndex;
   ring.innerHTML=''; dots.innerHTML='';
   const countEl = document.getElementById('count-'+key);
-  if (countEl) countEl.textContent = '— ' + n + (n===1 ? ' proyecto' : ' proyectos');
+  if (countEl) countEl.textContent = '— ' + n + (n===1 ? ' project' : ' projects');
   // Con un único proyecto no hay nada que "girar": escondemos flechas y puntos y lo dejamos como
   // una ficha destacada centrada, en vez de un carrusel con controles que no hacen nada.
   const prevBtn = document.getElementById('prev-'+key);
@@ -1465,7 +1466,7 @@ function initCarousel(key, data, initialDelay, initialTitle){
     if (initialDelay) setTimeout(startAuto, initialDelay); else startAuto();
   };
   carouselAutoControllers.push({ pause: stopAuto, resume, relayout: ()=> layout(new Set()) });
-  if (activeFace === 'proyectos') resume();
+  if (activeFace === 'projects') resume();
 }
 initCarousel('profesional', PROJECTS.profesional, 0, 'Pikkuli and the Starlight Reindeer');
 initCarousel('otros', PROJECTS.otros, 1200, 'La sociedad de la nieve');
@@ -1544,12 +1545,12 @@ function initHomeBanner(){
     // sea visible: como todavía está fuera de pantalla mientras entra deslizándose, lo que el
     // usuario ve es un único movimiento limpio que aterriza YA dentro del proyecto — nunca pasa
     // por el carrusel de por medio.
-    navigateTo('proyectos');
+    navigateTo('projects');
     openModal(p);
   }
   el.setAttribute('role', 'button');
   el.setAttribute('tabindex', '0');
-  el.setAttribute('aria-label', 'Ver proyectos');
+  el.setAttribute('aria-label', 'View projects');
   el.addEventListener('click', openCurrent);
   el.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCurrent(); }
