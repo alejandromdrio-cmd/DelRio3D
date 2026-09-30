@@ -375,6 +375,15 @@
   .reel-cta .contact-method .cm-value{font-size:.84rem; word-break:break-all;}
   @media(max-width:560px){.reel-cta{max-width:340px;}}
   .reel-info .reel-fallback{margin:14px 0 0; font-size:.72rem; color:var(--ink-dim);}
+  /* Aviso "¿necesitas la contraseña? contáctame" que solo aparece mientras el reel esté
+     bloqueado con contraseña (ver REEL_REQUIRES_PASSWORD en el script) — mismas cajas de
+     contacto que ya usamos en el resto de la página, reutilizadas aquí en miniatura. */
+  .reel-need-pw{max-width:580px; margin:22px auto 0; text-align:center;}
+  .reel-need-pw p{margin:0 0 14px; font-size:.88rem; font-weight:500; color:var(--ink);}
+  .reel-need-pw .contact-methods{margin-bottom:0;}
+  .reel-need-pw .contact-method{padding:16px; text-align:left;}
+  .reel-need-pw .contact-method .cm-value{font-size:.84rem; word-break:break-all;}
+  @media(max-width:560px){.reel-need-pw{max-width:340px;}}
   .reel-info .reel-fallback a{color:var(--sel); text-decoration:underline;}
 
   .foot-info p{margin:0 0 8px; font-size:.9rem;}
@@ -643,6 +652,19 @@
               </div>
               <button class="pw-btn" type="button" id="reel-btn">Submit</button>
               <p class="lock-msg" id="reel-msg"></p>
+            </div>
+          </div>
+          <div class="reel-need-pw" id="reel-need-pw">
+            <p>Need the reel password? Contact me directly</p>
+            <div class="contact-methods">
+              <a class="contact-method glass cm-orange" href="mailto:alejandro.mdrio@gmail.com">
+                <span class="cm-label">contact me by email</span>
+                <span class="cm-value">alejandro.mdrio@gmail.com</span>
+              </a>
+              <a class="contact-method glass cm-blue" href="https://www.linkedin.com/in/alexdelrio3d/" target="_blank" rel="noopener">
+                <span class="cm-label">contact me on linkedin</span>
+                <span class="cm-value">linkedin.com/in/alexdelrio3d</span>
+              </a>
             </div>
           </div>
           <div class="reel-info" id="reel-info" hidden>
@@ -1057,8 +1079,15 @@ window.addEventListener('keydown', (e)=>{
 // de verdad en Vercel (alexdelrio3d.com) — al abrir este archivo suelto
 // en tu ordenador, o en la vista previa de Claude, no hay ningún servidor detrás y el aviso
 // "esta comprobación solo funciona desplegada en vercel" es el comportamiento esperado, no un fallo.
+//
+// REEL_REQUIRES_PASSWORD: si el día de mañana el reel deja de necesitar contraseña, basta con
+// poner esto en "false" — el aviso "Need the reel password? Contact me directly" (con los botones de
+// contacto) desaparece solo, sin tocar nada más de este bloque.
+const REEL_REQUIRES_PASSWORD = true;
 const reelScreen = document.getElementById('reel-screen');
 const reelInfo = document.getElementById('reel-info');
+const reelNeedPw = document.getElementById('reel-need-pw');
+if (reelNeedPw) reelNeedPw.hidden = !REEL_REQUIRES_PASSWORD;
 const reelBtn = document.getElementById('reel-btn');
 const reelPw = document.getElementById('reel-pw');
 const reelPwToggle = document.getElementById('reel-pw-toggle');
@@ -1087,6 +1116,7 @@ function unlockReel(videoId){
   lockUi.style.opacity = '0';
   reelScreen.classList.remove('locked');
   reelScreen.classList.add('is-open'); // la pantalla se extiende con un aterrizaje suave (sin frenazo)
+  if (reelNeedPw) reelNeedPw.hidden = true; // ya está dentro, el aviso de "pide la contraseña" ya no pinta nada
 
   function showVideo(){
     reelScreen.innerHTML = `<iframe class="reel-iframe" src="${embedUrl}" allow="autoplay; fullscreen" loading="lazy"></iframe>`;
