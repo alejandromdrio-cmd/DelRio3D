@@ -914,10 +914,12 @@ function pauseReelVideo(){
 function navigateTo(face){
   if (face === activeFace || !ENTRY[face]) return;
   if (activeFace === 'reel' && face !== 'reel') pauseReelVideo();
-  // Si vamos a "proyectos" desde otra pestaña, siempre aterrizamos en el carrusel principal:
-  // aunque nos hubiéramos dejado abierto el detalle de un proyecto antes de irnos, no queremos
-  // volver justo ahí, sino al listado.
-  if (face === 'projects' && typeof closeProjectDetail === 'function' && projDetail && !projDetail.hidden) {
+  // Si hay un detalle de proyecto abierto (con su tráiler reproduciéndose) y nos vamos a
+  // cualquier otra pestaña —sea "proyectos" otra vez o cualquier otra—, lo cerramos aquí: si no,
+  // el tráiler se queda montado (aunque no se vea) y sigue sonando de fondo. Esto también hace
+  // que, al volver a "proyectos" desde otra pestaña, siempre aterricemos en el carrusel principal
+  // en vez de justo donde nos habíamos dejado el detalle abierto.
+  if (typeof closeProjectDetail === 'function' && projDetail && !projDetail.hidden) {
     closeProjectDetail();
   }
   const cfg = ENTRY[face];
