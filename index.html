@@ -139,13 +139,13 @@
      bajo esa palabra (más ancha) y más pequeño, en su propia línea. La foto, circular y grande,
      va encima del nombre — con presencia real en vez de quedarse en una insignia pequeña. */
   .hero-avatar-frame{width:120px; height:120px; border-radius:50%; border:3px solid var(--line-soft);
-    background:var(--sky-mid); padding:7px; box-sizing:border-box; overflow:hidden; visibility:hidden;
+    background:var(--sky-mid); padding:0; box-sizing:border-box; overflow:hidden; visibility:hidden;
     margin:0 0 22px; box-shadow:0 10px 26px rgba(0,0,0,.35); cursor:pointer; display:block;
     -webkit-appearance:none; appearance:none; transition:border-color .2s ease, transform .2s ease;}
   .hero-avatar-frame:hover{border-color:var(--sel); transform:translateY(-2px);}
   .hero-avatar-frame.is-ready{visibility:visible;}
   .hero-avatar{width:100%; height:100%; border-radius:50%; object-fit:cover; object-position:center; display:block;}
-  @media(max-width:480px){.hero-avatar-frame{width:96px; height:96px; padding:6px;}}
+  @media(max-width:480px){.hero-avatar-frame{width:96px; height:96px;}}
   h1.hero-name{font-family:'IBM Plex Mono',monospace; font-weight:600; text-transform:uppercase;
     font-size:clamp(2.6rem,7.2vw,4.6rem); line-height:.96; letter-spacing:-.01em; margin:0 0 22px;
     max-width:none; display:inline-block; text-align:center;}
@@ -362,8 +362,9 @@
   .reel-info{max-width:100%; margin:26px auto 0; text-align:center; opacity:0; transform:translateY(14px);
     transition:opacity .6s ease .1s, transform .6s ease .1s;}
   .reel-info.is-visible{opacity:1; transform:translateY(0);}
-  .reel-cta{max-width:420px; margin:0 auto; text-align:left;}
-  .reel-cta .contact-methods{margin-bottom:0; grid-template-columns:1fr;}
+  .reel-cta{max-width:500px; margin:0 auto; text-align:left;}
+  .reel-cta .contact-methods{margin-bottom:0;}
+  @media(max-width:560px){.reel-cta{max-width:340px;}}
   .reel-info .reel-fallback{margin:14px 0 0; font-size:.72rem; color:var(--ink-dim);}
   .reel-info .reel-fallback a{color:var(--sel); text-decoration:underline;}
 
@@ -897,8 +898,18 @@ window.addEventListener('resize', ()=>{
 });
 setTimeout(()=> onFaceChanged(document.getElementById('face-home')), 1800);
 
+// Pausa el vídeo del reel al salir de esa pestaña (si lo dejamos reproduciéndose de fondo, seguía
+// sonando/gastando datos aunque ya no se viera). Al volver a "reel" el iframe sigue ahí tal cual
+// (no lo destruimos), así que se retoma justo donde se dejó con solo darle a play otra vez.
+function pauseReelVideo(){
+  const iframe = document.querySelector('#reel-screen .reel-iframe');
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage(JSON.stringify({event:'command', func:'pauseVideo', args:[]}), '*');
+  }
+}
 function navigateTo(face){
   if (face === activeFace || !ENTRY[face]) return;
+  if (activeFace === 'reel' && face !== 'reel') pauseReelVideo();
   // Si vamos a "proyectos" desde otra pestaña, siempre aterrizamos en el carrusel principal:
   // aunque nos hubiéramos dejado abierto el detalle de un proyecto antes de irnos, no queremos
   // volver justo ahí, sino al listado.
@@ -1051,7 +1062,9 @@ function unlockReel(videoId){
   // en vez de la mínima por defecto. No está garantizado (YouTube puede ignorarlo o bajarlo si
   // detecta poco ancho de banda), pero no tiene contra: mejora el arranque para la mayoría sin
   // arriesgar nada para quien tenga conexión lenta.
-  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&vq=hd1080`;
+  // "enablejsapi=1" nos permite mandarle al reproductor comandos por postMessage (como pausarlo)
+  // desde fuera del iframe, sin tener que cargar la librería entera de la API de YouTube.
+  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&vq=hd1080&enablejsapi=1`;
   if (reelFallbackLink) reelFallbackLink.href = `https://youtu.be/${videoId}`;
 
   const lockUi = reelScreen.querySelector('.lock-ui');
@@ -1064,6 +1077,11 @@ function unlockReel(videoId){
     const iframe = reelScreen.querySelector('.reel-iframe');
     requestAnimationFrame(()=> iframe.classList.add('is-visible')); // el vídeo aparece con fundido una vez el hueco ya está totalmente desplegado
     reelInfo.hidden = false;
+    // Forzamos un reflow aquí: si no, el navegador agrupa el "hidden=false" y el añadido de
+    // is-visible en el mismo frame y se salta la transición por completo (aparece de golpe en
+    // vez de con el fundido suave). Con este reflow de por medio, el estado inicial (opacity:0)
+    // se pinta antes de pedirle que transicione a opacity:1.
+    void reelInfo.offsetWidth;
     requestAnimationFrame(()=> reelInfo.classList.add('is-visible')); // el texto explicativo aparece justo después
   }
 
