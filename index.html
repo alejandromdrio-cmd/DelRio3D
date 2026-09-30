@@ -362,8 +362,12 @@
   .reel-info{max-width:100%; margin:26px auto 0; text-align:center; opacity:0; transform:translateY(14px);
     transition:opacity .6s ease .1s, transform .6s ease .1s;}
   .reel-info.is-visible{opacity:1; transform:translateY(0);}
-  .reel-cta{max-width:500px; margin:0 auto; text-align:left;}
+  .reel-cta{max-width:580px; margin:0 auto; text-align:left;}
   .reel-cta .contact-methods{margin-bottom:0;}
+  /* Aquí las cajas salen más estrechas que en la página de contacto, así que el email/enlace
+     necesitan una letra algo más pequeña para no partirse a mitad de palabra. */
+  .reel-cta .contact-method{padding:16px;}
+  .reel-cta .contact-method .cm-value{font-size:.84rem; word-break:break-all;}
   @media(max-width:560px){.reel-cta{max-width:340px;}}
   .reel-info .reel-fallback{margin:14px 0 0; font-size:.72rem; color:var(--ink-dim);}
   .reel-info .reel-fallback a{color:var(--sel); text-decoration:underline;}
