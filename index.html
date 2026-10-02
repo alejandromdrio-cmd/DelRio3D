@@ -943,7 +943,8 @@ function pauseReelVideo(){
     iframe.contentWindow.postMessage(JSON.stringify({event:'command', func:'pauseVideo', args:[]}), '*');
   }
 }
-function navigateTo(face){
+function navigateTo(face, opts){
+  opts = opts || {};
   if (face === activeFace || !ENTRY[face]) return;
   if (activeFace === 'reel' && face !== 'reel') pauseReelVideo();
   // Si hay un detalle de proyecto abierto (con su tráiler reproduciéndose) y nos vamos a
@@ -981,7 +982,7 @@ function navigateTo(face){
   document.querySelectorAll('[data-face]').forEach(el=> el.classList.toggle('is-active', el.dataset.face === face));
   pulseCurve(cfg.curve);
   activeFace = face;
-  setHashForFace(face);
+  if (!opts.skipHistory) setHashForFace(face, 'push');
   onFaceChanged(inEl);
   // Los carruseles de "proyectos" solo deben girar solos mientras esa página está a la vista —
   // si no, seguían avanzando de fondo aunque estuviéramos en otra pestaña sin verlos.
@@ -993,17 +994,37 @@ function navigateTo(face){
 // para que ese enlace siempre lleve directo ahí, sin pasar por la portada.
 // Así, p.ej., "tu-portfolio.com/#reel" es un enlace ESTABLE al reel: si cambias el vídeo
 // o la contraseña dentro del código más adelante, el enlace que compartes no cambia nunca.
-function setHashForFace(face){
-  if (!history.replaceState) return;
+//
+// "push" (navegación normal, con nav/flechas) añade una entrada nueva al historial del
+// navegador; "replace" la sustituye sin añadir una nueva. Antes esto siempre usaba
+// replaceState, así que todas las "páginas" vivían en una única entrada del historial: al
+// pulsar "atrás" el navegador no tenía ningún paso intermedio al que volver dentro de la web
+// y la gente se iba directamente de la página (lo que parecía "se me ha cerrado todo"). Con
+// pushState, cada sección visitada queda registrada, y el botón "atrás" primero te devuelve
+// a la sección anterior dentro de la web — solo sale de verdad cuando ya no queda ninguna.
+function setHashForFace(face, mode){
+  if (!history.pushState) return;
   const hash = face === 'home' ? '' : ('#' + face);
+  const url = location.pathname + location.search + hash;
   // En algunos entornos con restricciones (p.ej. la vista previa de artefactos, dentro de un
   // iframe "about:srcdoc") el navegador no permite tocar la URL y lanza un SecurityError; en la
   // web real desplegada esto nunca pasa. Lo envolvemos para que, si ocurre, simplemente no
   // actualicemos el hash en vez de romper la navegación.
   try {
-    history.replaceState(null, '', location.pathname + location.search + hash);
+    if (mode === 'replace') history.replaceState({face}, '', url);
+    else history.pushState({face}, '', url);
   } catch (e) { /* entorno restringido: ignorar */ }
 }
+// Al pulsar "atrás"/"adelante", el navegador cambia la URL por su cuenta (sin pasar por
+// setHashForFace) y dispara este evento: aquí solo nos toca mover la web a la cara que le
+// corresponde a esa URL, sin volver a tocar el historial (si no, se nos líaría con el propio
+// navegador añadiendo o quitando entradas por su cuenta).
+window.addEventListener('popstate', () => {
+  const fromHash = (location.hash || '').replace('#', '');
+  const fromPath = location.pathname.replace(/^\/|\/$/g, '');
+  const target = ENTRY[fromHash] ? fromHash : (ENTRY[fromPath] ? fromPath : 'home');
+  if (target !== activeFace) navigateTo(target, {skipHistory: true});
+});
 function jumpToFaceInstant(face){
   if (!ENTRY[face] || face === activeFace) return;
   const cfg = ENTRY[face];
